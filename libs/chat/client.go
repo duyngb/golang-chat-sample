@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"fmt"
 	"time"
 
 	"example.com/socket-server/libs/common"
@@ -95,6 +96,7 @@ func (c *Client) ReadPump() {
 			break
 		}
 		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		message = []byte(fmt.Sprintf("%p: %s", c.conn, message))
 		c.hub.Broadcast(message)
 	}
 }
@@ -136,15 +138,12 @@ func (c *Client) WritePump() {
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				clientLogger.Errorf("client ping failed: %v", err)
+				// For most case, connection has been closed in somewhere,
+				// and we have nothing to do with this.
 				return
 			}
 		}
 	}
-}
-
-// ToString returns identifier of this client.
-func (c *Client) ToString() string {
-	return ""
 }
 
 // unregister myself from hub.

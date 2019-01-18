@@ -49,8 +49,8 @@ func (h *Hub) Run() {
 		select {
 		case client := <-h.register:
 			h.clients[client] = true
-			hubLogger.Infof("New client registered: %v", client.conn)
-			h.Broadcast([]byte(fmt.Sprintf("New client join: %v", client.conn)))
+			hubLogger.Infof("New client registered: %p", client.conn)
+			go h.Broadcast([]byte(fmt.Sprintf("New client join: %p", client.conn)))
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client) // Remove client from registered list
@@ -60,7 +60,7 @@ func (h *Hub) Run() {
 			for client := range h.clients {
 				select {
 				case client.send <- message:
-					hubLogger.Infof("send %v <- %s", client.conn, message)
+					hubLogger.Infof("send %p <- %s", client.conn, message)
 				default:
 					close(client.send)
 					delete(h.clients, client)
