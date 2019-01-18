@@ -1,0 +1,10 @@
+# Known IDE configs
+.idea/
+.vs/
+.vscode/
+
+# PEM key file
+*.pem
+
+# Built files
+bin/

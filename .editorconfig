@@ -1,0 +1,21 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+end_of_line = lf
+
+[Makefile]
+indent_style = tab  # Makefiles use strictly tab indention
+
+[*.{bat,cmd}]
+end_of_line = crlf  # Batch files must be in CRLF mode
+
+[*.sh]
+end_of_line = lf    # Shell script must have LF mode
+
+[*.html]
+insert_final_newline = false
