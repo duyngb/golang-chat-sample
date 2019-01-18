@@ -116,7 +116,7 @@ func (c *Client) WritePump() {
 	for {
 		select {
 		case message, ok := <-c.send: // Send request
-			clientLogger.Infof("Received send request: %s", message)
+			clientLogger.Debugf("Received send request: %s", message)
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				// Hub closes channel.
