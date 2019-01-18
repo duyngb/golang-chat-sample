@@ -17,17 +17,17 @@ type ChatRoom struct {
 	Hub *chat.Hub
 }
 
-func (r ChatRoom) init(prefix string, s *echo.Echo, mi ...echo.MiddlewareFunc) {
+func (r *ChatRoom) init(prefix string, s *echo.Echo, mi ...echo.MiddlewareFunc) {
 	g := s.Group(prefix, mi...)
 	g.GET("", r.landingPage)
 	g.GET("/ws", r.chatroom)
 }
 
-func (r ChatRoom) landingPage(c echo.Context) error {
+func (r *ChatRoom) landingPage(c echo.Context) error {
 	return c.Render(http.StatusOK, "chatroom/landing.html", nil)
 }
 
-func (r ChatRoom) chatroom(c echo.Context) (e error) {
+func (r *ChatRoom) chatroom(c echo.Context) (e error) {
 	var (
 		conn   *websocket.Conn
 		client *chat.Client
@@ -47,11 +47,5 @@ func (r ChatRoom) chatroom(c echo.Context) (e error) {
 	go client.WritePump()
 	go client.ReadPump()
 
-	// for {
-	// 	switch {
-	// 	case <-client.Disconnected:
-	// 		return
-	// 	}
-	// }
 	return
 }

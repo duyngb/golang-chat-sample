@@ -55,9 +55,9 @@ func NewServer() *Server {
 	}
 
 	// Bind routes
-	routes.Bind("/", routes.DefaultRoute{}, e)
-	routes.Bind("/d", routes.D{}, e)
-	routes.Bind("/chatroom", routes.ChatRoom{Hub: h}, e)
+	routes.Bind("/", &routes.DefaultRoute{}, e)
+	routes.Bind("/d", &routes.D{}, e)
+	routes.Bind("/chatroom", &routes.ChatRoom{Hub: h}, e)
 
 	// Cast original echo server to our alias
 	return &Server{e, h, isDebug}

@@ -5,6 +5,9 @@ import (
 )
 
 // SimpleRoute holds basic methods for manage a single route.
+//
+// All subsequence type must implement this interface to use
+// routes.Bind method.
 type SimpleRoute interface {
 	init(prefix string, echoServer *echo.Echo, middlewareFuncs ...echo.MiddlewareFunc)
 }
@@ -16,7 +19,8 @@ type RouteInfo struct {
 	MiddlewareFuncs []echo.MiddlewareFunc
 }
 
-// RouteInfoCollections is a type alias for collection of route info objects.
+// RouteInfoCollections is a type alias for collection of route
+// info objects.
 type RouteInfoCollections []*RouteInfo
 
 // Bind binds a specific route to an echo server.
