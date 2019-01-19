@@ -32,11 +32,13 @@ func NewServer() *Server {
 	h := chat.NewHub()
 
 	// Initialize server with required configurations
-	e.Use(middleware.Recover())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "${remote_ip}->${host} ${status} ${method} ${uri} (${latency_human})\n",
-	}))
-	e.Use(middleware.Static("public"))
+	e.Use(
+		middleware.Recover(),
+		middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: "${remote_ip}->${host} ${status} ${method} ${uri} (${latency_human})\n",
+		}),
+		middleware.Static("public"),
+		middleware.Static("ts/dist"))
 	e.Logger.(*log.Logger).SetHeader(common.LogHeader)
 
 	// Register template renderer
