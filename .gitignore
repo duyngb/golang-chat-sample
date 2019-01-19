@@ -8,3 +8,7 @@
 
 # Built files
 bin/
+dist/
+
+# Node.JS module dir
+node_modules/
