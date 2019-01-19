@@ -50,11 +50,12 @@ func (h *Hub) Run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			hubLogger.Debugf("New client registered: %p", client.conn)
-			go h.Broadcast([]byte(fmt.Sprintf("New client join: %p", client.conn)))
+			go h.Broadcast(msgFmt("New client join: %p", client.conn))
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client) // Remove client from registered list
 				close(client.send)
+				go h.Broadcast(msgFmt("Client %p leave", client.conn))
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
@@ -73,4 +74,8 @@ func (h *Hub) Run() {
 // Broadcast broadcasts message to every client.
 func (h *Hub) Broadcast(message []byte) {
 	h.broadcast <- message
+}
+
+func msgFmt(format string, a ...interface{}) []byte {
+	return []byte(fmt.Sprintf(format, a...))
 }
