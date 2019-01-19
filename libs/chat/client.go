@@ -90,8 +90,8 @@ func (c *Client) ReadPump() {
 	for {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
-				clientLogger.Infof("client disconnected | %v", err)
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseNormalClosure) {
+				clientLogger.Debugf("client disconnected | %v", err)
 			}
 			break
 		}
