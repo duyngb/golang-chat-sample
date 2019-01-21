@@ -38,7 +38,7 @@ func NewServer() *Server {
 			Format: "${remote_ip}->${host} ${status} ${method} ${uri} (${latency_human})\n",
 		}),
 		middleware.Static("public"),
-		middleware.Static("ts/dist"))
+		middleware.Static("client/dist"))
 	e.Logger.(*log.Logger).SetHeader(common.LogHeader)
 
 	// Register template renderer

@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"example.com/socket-server/libs/chat"
 
 	"github.com/gorilla/websocket"
@@ -24,7 +22,8 @@ func (r *ChatRoom) init(prefix string, s *echo.Echo, mi ...echo.MiddlewareFunc) 
 }
 
 func (r *ChatRoom) landingPage(c echo.Context) error {
-	return c.Render(http.StatusOK, "chatroom/landing.html", nil)
+	return c.File("client/dist/chatroom.html")
+	// return c.Render(http.StatusOK, "chatroom/chatroom.html", nil)
 }
 
 func (r *ChatRoom) chatroom(c echo.Context) (e error) {

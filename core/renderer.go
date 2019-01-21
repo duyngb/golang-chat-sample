@@ -14,10 +14,9 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-var rendererLogger *log.Logger
+var rendererLogger = log.New("renderder")
 
 func init() {
-	rendererLogger = log.New("renderder")
 	rendererLogger.SetHeader(common.LogHeader)
 }
 

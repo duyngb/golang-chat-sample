@@ -1,0 +1,36 @@
+{
+  "name": "sockts",
+  "version": "0.0.1",
+  "description": "Client front-end PWA for socket server",
+  "scripts": {
+    "build": "webpack-cli --config webpack.config.prod.js",
+    "builddev": "webpack-cli --config webpack.config.dev.js",
+    "start": "webpack-cli -w --config webpack.config.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duyngb/golang-chat-sample.git"
+  },
+  "private": true,
+  "author": "Stoik",
+  "license": "MIT",
+  "dependencies": {
+    "@types/react": "^16.7.20",
+    "@types/react-dom": "^16.0.11",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "~10.0.0",
+    "clean-webpack-plugin": "^1.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^5.3.3",
+    "ts-node": "~7.0.0",
+    "tslint": "*",
+    "typescript": "^3.2.4",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1",
+    "webpack-merge": "^4.2.1"
+  }
+}
