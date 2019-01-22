@@ -9,7 +9,7 @@ module.exports = {
   mode: 'development',
   stats: true,
   entry: {
-    chatapp: resolve( 'src', 'index.tsx' )
+    chatroom: resolve( 'src', 'chatroom.tsx' )
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -49,9 +49,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
     new HTMLWebpackPlugin( {
-      template: resolve( 'src', 'index.html' ),
+      template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
-      title: 'React Example'
+      chunks: [ 'runtime', 'vendors', 'chatroom' ]
     } ),
     new HashedModuleIdsPlugin()
   ]
