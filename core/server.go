@@ -2,7 +2,9 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"os"
+	"os/exec"
 	"os/signal"
 	"time"
 
@@ -72,7 +74,27 @@ func (s *Server) Run() {
 	// 	e.Logger.Fatal(err)
 	// }
 
+	var watcher *exec.Cmd
+
 	go s.Hub.Run()
+
+	// Start subprocess
+	go func() {
+		if s.Debug {
+			watcher = exec.Command("npm", "run", "start")
+
+			watcher.Dir = "./client"
+
+			watcher.Stdout = os.Stdout
+			watcher.Stderr = os.Stderr
+
+			err := watcher.Run()
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				return
+			}
+		}
+	}()
 
 	if err := s.Start("localhost:8000"); err != nil {
 		s.Logger.Fatal("Shutting down HTTP server due to error...")
@@ -86,7 +108,14 @@ func (s *Server) Run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel() // Release resource if op complete before timed out
 
-	if err := s.Shutdown(ctx); err != nil {
-		s.Logger.Fatal(err)
+	defer func() {
+		if err := s.Shutdown(ctx); err != nil {
+			s.Logger.Fatal(err)
+		}
+	}()
+
+	s.Logger.Infof("Stopping process %d", watcher.Process.Pid)
+	if err := watcher.Process.Signal(os.Interrupt); err != nil {
+		fmt.Printf("%v\n", err)
 	}
 }
