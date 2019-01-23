@@ -20,5 +20,5 @@ end_of_line = lf    # Shell script must have LF mode
 [*.html]
 insert_final_newline = false
 
-[*.{js,json,ts}]
+[*.{js,jsx,json,ts,tsx}]
 indent_size = 2
