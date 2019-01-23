@@ -8,5 +8,8 @@ module.exports = merge( common, {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: resolve( 'dist' )
+  },
+  output: {
+    filename: '[name].js',
   }
 } );
