@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from 'react-redux';
-import { addMessage, MsgAction } from "../reducers/chatroom.actions";
+import { addMessage, MsgAction } from "../reducers/messages";
 import { Dispatch } from "redux";
 
 function mapDispatchToProps (dispatch: Dispatch) {
@@ -47,7 +47,7 @@ class ChatInputComp extends React.Component<ChatInputProps> {
         <input type="text" name="message" id="message"
           value={this.state.message}
           onChange={this.handleChange} />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" disabled={!!!this.state.message} />
       </form>
     );
   };

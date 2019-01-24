@@ -1,4 +1,4 @@
-import { MsgActionType, MsgAction } from "./chatroom.actions";
+import { MsgActionType, MsgAction } from "./messages";
 
 export type RootState = {
   messages: ReadonlyArray<string>
@@ -8,12 +8,12 @@ const initalState: RootState = {
   messages: []
 };
 
-function rootReducer (state = initalState, action: MsgAction): RootState {
+export default function rootReducer (state = initalState, action: MsgAction): RootState {
   switch (action.type) {
     case MsgActionType.ADD_MSG:
-      return {
+      if (action.payload) return {
         ...state,
-        messages: <ReadonlyArray<string>>state.messages.concat(action.payload)
+        messages: state.messages.concat(action.payload)
       }
 
     default:
@@ -22,5 +22,3 @@ function rootReducer (state = initalState, action: MsgAction): RootState {
 
   return state
 }
-
-export default rootReducer

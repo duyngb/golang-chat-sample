@@ -16,9 +16,7 @@ class ChatMessages extends React.Component<MessagesListProps> {
     return (
       <ul className="list-group list-group-flush">
         {this.props.messages.map((m, id) => (
-          <li className="list-group-item" key={id}>
-            {m}
-          </li>
+          <li key={id}> {m} </li>
         ))}
       </ul>
     )
