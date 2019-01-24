@@ -2,12 +2,23 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import { Chatroom } from './components/Chatroom';
+import { createStore } from 'redux';
+import Chatroom from './components/Chatroom';
+import { MessagesStore } from './types';
+import { MessageAction } from './reducers/messages';
+import { message } from './reducers';
 
-import store from './store';
+const messageStore = createStore<MessagesStore, MessageAction, object, object>(
+  message,
+  {
+    messages: [],
+    pendingMessages: [],
+    failedMessages: []
+  }
+)
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={messageStore}>
     <Chatroom />
   </Provider>,
   document.getElementById('chatroom')

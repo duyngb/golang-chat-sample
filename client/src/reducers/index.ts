@@ -1,24 +1,61 @@
-import { MsgActionType, MsgAction } from "./messages";
+import { MessagesStore, Message } from 'src/types';
+import { MessageAction } from './messages';
+import { ADD_MESSAGE, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
 
-export type RootState = {
-  messages: ReadonlyArray<string>
-}
-
-const initalState: RootState = {
-  messages: []
-};
-
-export default function rootReducer (state = initalState, action: MsgAction): RootState {
+/**
+ * Message reducer.
+ */
+export function message (state: MessagesStore, action: MessageAction): MessagesStore {
   switch (action.type) {
-    case MsgActionType.ADD_MSG:
-      if (action.payload) return {
-        ...state,
-        messages: state.messages.concat(action.payload)
+    case ADD_MESSAGE:
+      if (action.payload) {
+        return {
+          ...state,
+          messages: push(state.messages, action.payload)
+        }
       }
-
-    default:
-      break;
+      break
+    case SEND_MESSAGE:
+      return {
+        ...state,
+        pendingMessages: push(state.pendingMessages, action.payload)
+      }
+    case SEND_STATUS:
+      if (action.success) {
+        return {
+          ...state,
+          messages: state.messages.concat(state.pendingMessages),
+          pendingMessages: pop(state.pendingMessages, action.payload),
+        }
+      } else {
+        return {
+          ...state,
+          pendingMessages: pop(state.pendingMessages, action.payload),
+          failedMessages: push(state.failedMessages, action.payload)
+        }
+      }
+    default: break
   }
 
   return state
+}
+
+// Helpers
+
+/**
+ * Combine source array with new item. Returns modifed array.
+ * @param source - Source array data
+ * @param item  - New item to add
+ */
+function push (source: ReadonlyArray<Message>, item: Message | ConcatArray<Message>) {
+  return source.concat(item) as ReadonlyArray<Message>
+}
+
+/**
+ * Remove `item` from source array. Returns modifed array.
+ * @param source - Source array data
+ * @param item - Item to remove
+ */
+function pop (source: ReadonlyArray<Message>, item: Message) {
+  return source.filter(i => i !== item) as ReadonlyArray<Message>
 }

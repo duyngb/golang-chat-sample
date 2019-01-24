@@ -1,20 +1,41 @@
-import { Action } from "redux";
+import * as constants from 'src/constants'
+import { Message } from 'src/types';
 
-export const enum MsgActionType {
-  /** Add message to stack. */
-  ADD_MSG = 'ADD_MSG',
-  /** Send message to server. */
-  SEND_MSG = 'SEND_MSG',
-};
+export interface AddMessage {
+  type: constants.ADD_MESSAGE,
+  payload: Message
+}
 
-export interface MsgAction<T = MsgActionType> extends Action {
-  type: T
-  payload: string
-};
+export interface SendMessage {
+  type: constants.SEND_MESSAGE,
+  payload: Message
+}
 
-export function addMessage (payload: string): MsgAction<MsgActionType.ADD_MSG> {
+export interface SentStatus {
+  type: constants.SEND_STATUS,
+  payload: Message,
+  success: boolean
+}
+
+/**
+ * MessageAction type is an action related to manage message state
+ * in current chat log.
+ *
+ * All action type are defined in {@module src/constants}.
+ */
+export type MessageAction = (
+  AddMessage |
+  SendMessage |
+  SentStatus
+)
+
+
+export function submit (message: string): SendMessage {
   return {
-    type: MsgActionType.ADD_MSG,
-    payload: payload
+    type: constants.SEND_MESSAGE,
+    payload: {
+      content: message,
+      timestamp: Date.now()
+    }
   }
-};
+}

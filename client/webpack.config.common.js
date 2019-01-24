@@ -30,6 +30,10 @@ module.exports = {
   },
 
   resolve: {
+    // Add current directory to resolve path, used to use absolute import
+    // incase of our code base grow large
+    // TODO: Aware about NODE_PATH env
+    modules: [ 'node_modules', '.' ],
     extensions: [ '.ts', '.tsx', '.js', '.json' ]
   },
 

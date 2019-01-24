@@ -1,26 +1,26 @@
 import * as React from 'react';
-import { ConnectedChatInput } from './ChatInput';
-import { ConnectedChatMessages } from './ChatMessages';
+import ConnectedChatHistory from 'src/containers/ChatHistory';
+import ConnectedChatInput from 'src/containers/ChatInput';
 
-declare type chatroomState = {
-  timestamp: number
+interface ChatroomState {
+  timestamp: Date
 }
 
-export class Chatroom extends React.Component {
-  state: chatroomState;
+export default class Chatroom extends React.Component<object, ChatroomState> {
+  // state: ChatroomState
 
   constructor (props: any) {
     super(props);
     this.state = {
-      timestamp: Date.now()
-    };
+      timestamp: new Date(Date.now())
+    }
   };
 
   render () {
     return (
       <div>
-        <p>{this.state.timestamp}</p>
-        <ConnectedChatMessages />
+        <p>Constructed time: {this.state.timestamp.toLocaleString()}</p>
+        <ConnectedChatHistory />
         <ConnectedChatInput />
       </div>
     );

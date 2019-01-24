@@ -1,19 +1,11 @@
 import * as React from "react";
-import { connect } from 'react-redux';
-import { addMessage, MsgAction } from "../reducers/messages";
-import { Dispatch } from "redux";
+import { SendMessage } from 'src/reducers/messages';
 
-function mapDispatchToProps (dispatch: Dispatch) {
-  return {
-    addMessage: (msg: string) => dispatch(addMessage(msg))
-  }
+export interface ChatInputProps {
+  submitMessage: (m: string) => SendMessage
 }
 
-type ChatInputProps = {
-  addMessage: (msg: string) => MsgAction
-}
-
-class ChatInputComp extends React.Component<ChatInputProps> {
+export default class ChatInput extends React.Component<ChatInputProps> {
   state: {
     message: string
   }
@@ -37,7 +29,7 @@ class ChatInputComp extends React.Component<ChatInputProps> {
     e.preventDefault();
 
     const { message } = this.state;
-    this.props.addMessage(message);
+    this.props.submitMessage(message);
     this.setState({ message: '' });
   }
 
@@ -47,14 +39,8 @@ class ChatInputComp extends React.Component<ChatInputProps> {
         <input type="text" name="message" id="message"
           value={this.state.message}
           onChange={this.handleChange} />
-        <input type="submit" value="Submit" disabled={!!!this.state.message} />
+        <input type="submit" value="Submit" disabled={!this.state.message} />
       </form>
     );
   };
 };
-
-
-export const ConnectedChatInput = connect(
-  null,
-  mapDispatchToProps
-)(ChatInputComp);
