@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as actions from 'src/reducers/messages';
+import * as actions from 'src/actions/message';
 import ChatInput, { ChatInputProps } from 'src/components/ChatInput';
 
 function mapDispatchToProps (d: Dispatch<actions.MessageAction>): ChatInputProps {

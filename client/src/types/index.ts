@@ -12,10 +12,10 @@ export interface Message {
  * to display sent and received messages.
  */
 export interface MessagesStore {
-  // Message stack
+  /** Message stack. */
   messages: ReadonlyArray<Message>
-  // Messages sending to server and waiting for response
+  /** Messages sending to server and waiting for response. */
   pendingMessages: ReadonlyArray<Message>
-  // Messages failed to send
+  /** Messages failed to send, and should be marked to resend or delete. */
   failedMessages: ReadonlyArray<Message>
 }

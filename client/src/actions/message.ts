@@ -21,7 +21,7 @@ export interface SentStatus {
  * MessageAction type is an action related to manage message state
  * in current chat log.
  *
- * All action type are defined in {@module src/constants}.
+ * All action type are defined in {@link constants}.
  */
 export type MessageAction = (
   AddMessage |

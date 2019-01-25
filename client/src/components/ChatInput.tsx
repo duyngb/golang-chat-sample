@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SendMessage } from 'src/reducers/messages';
+import { SendMessage } from 'src/actions/message';
 
 export interface ChatInputProps {
   submitMessage: (m: string) => SendMessage
