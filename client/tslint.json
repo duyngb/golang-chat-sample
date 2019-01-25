@@ -6,8 +6,20 @@
   ],
   "defaultSeverity": "warning",
   "rules": {
+    "max-line-length": {
+      "options": [ 120 ]
+    },
     "interface-name": false,
     "semicolon": true,
+    "no-consecutive-blank-lines": true,
+    "no-console": {
+      "options": [ "debug", "info", "log", "time", "timeEnd", "trace" ]
+    }
+  },
+  "jsRules": {
+    "max-line-length": {
+      "options": [ 120 ]
+    }
   },
   "linterOptions": {
     "exclude": [

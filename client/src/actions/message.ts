@@ -29,7 +29,6 @@ export type MessageAction = (
   SentStatus
 );
 
-
 export function submit (message: string): SendMessage {
   return {
     payload: {
