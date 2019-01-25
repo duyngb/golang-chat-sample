@@ -2,16 +2,16 @@ import * as React from "react";
 import { SendMessage } from 'src/actions/message';
 
 export interface ChatInputProps {
-  submitMessage: (m: string) => SendMessage
+  submitMessage: (m: string) => SendMessage;
 }
 
 export default class ChatInput extends React.Component<ChatInputProps> {
-  state: {
+  public state: {
     message: string
-  }
+  };
 
   constructor (props: any) {
-    super(props)
+    super(props);
 
     this.state = {
       message: ''
@@ -19,13 +19,13 @@ export default class ChatInput extends React.Component<ChatInputProps> {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  };
+  }
 
-  handleChange (event: React.ChangeEvent<HTMLInputElement>) {
+  public handleChange (event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleSubmit (e: React.FormEvent<HTMLFormElement>) {
+  public handleSubmit (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const { message } = this.state;
@@ -33,7 +33,7 @@ export default class ChatInput extends React.Component<ChatInputProps> {
     this.setState({ message: '' });
   }
 
-  render () {
+  public render () {
     return (
       <form onSubmit={this.handleSubmit} >
         <input type="text" name="message" id="message"
@@ -42,5 +42,5 @@ export default class ChatInput extends React.Component<ChatInputProps> {
         <input type="submit" value="Submit" disabled={!this.state.message} />
       </form>
     );
-  };
-};
+  }
+}

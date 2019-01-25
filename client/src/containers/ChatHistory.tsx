@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
 
-import { MessagesStore } from 'src/types';
 import ChatHistory, { ChatHistoryProps } from 'src/components/ChatHistory';
+import { MessagesStore } from 'src/types';
 
 export function mapStateToProps ({ messages, pendingMessages, failedMessages }: MessagesStore): ChatHistoryProps {
   return {
+    failedMessages,
     messages,
     pendingMessages,
-    failedMessages
-  }
+  };
 }
 
-const ConnectedChatHistory = connect(mapStateToProps, {})(ChatHistory)
+const ConnectedChatHistory = connect(mapStateToProps, {})(ChatHistory);
 
-export default ConnectedChatHistory
+export default ConnectedChatHistory;

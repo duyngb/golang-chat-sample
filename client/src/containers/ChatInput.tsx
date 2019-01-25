@@ -7,12 +7,12 @@ import ChatInput, { ChatInputProps } from 'src/components/ChatInput';
 function mapDispatchToProps (d: Dispatch<actions.MessageAction>): ChatInputProps {
   return {
     submitMessage: (m: string) => d(actions.submit(m))
-  }
+  };
 }
 
 const ConnectedChatInput = connect(
   null,
   mapDispatchToProps
-)(ChatInput)
+)(ChatInput);
 
-export default ConnectedChatInput
+export default ConnectedChatInput;

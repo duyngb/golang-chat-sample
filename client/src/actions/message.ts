@@ -1,20 +1,20 @@
-import * as constants from 'src/constants'
+import * as constants from 'src/constants';
 import { Message } from 'src/types';
 
 export interface AddMessage {
-  type: constants.ADD_MESSAGE,
-  payload: Message
+  type: constants.ADD_MESSAGE;
+  payload: Message;
 }
 
 export interface SendMessage {
-  type: constants.SEND_MESSAGE,
-  payload: Message
+  type: constants.SEND_MESSAGE;
+  payload: Message;
 }
 
 export interface SentStatus {
-  type: constants.SEND_STATUS,
-  payload: Message,
-  success: boolean
+  type: constants.SEND_STATUS;
+  payload: Message;
+  success: boolean;
 }
 
 /**
@@ -27,15 +27,15 @@ export type MessageAction = (
   AddMessage |
   SendMessage |
   SentStatus
-)
+);
 
 
 export function submit (message: string): SendMessage {
   return {
-    type: constants.SEND_MESSAGE,
     payload: {
       content: message,
       timestamp: Date.now()
-    }
-  }
+    },
+    type: constants.SEND_MESSAGE,
+  };
 }

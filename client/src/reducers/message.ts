@@ -1,6 +1,6 @@
-import { MessagesStore, Message } from 'src/types';
 import { MessageAction } from 'src/actions/message';
 import { ADD_MESSAGE, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
+import { Message, MessagesStore } from 'src/types';
 
 /**
  * Message reducer.
@@ -12,32 +12,32 @@ export function message (state: MessagesStore, action: MessageAction): MessagesS
         return {
           ...state,
           messages: push(state.messages, action.payload)
-        }
+        };
       }
-      break
+      break;
     case SEND_MESSAGE:
       return {
         ...state,
         pendingMessages: push(state.pendingMessages, action.payload)
-      }
+      };
     case SEND_STATUS:
       if (action.success) {
         return {
           ...state,
           messages: state.messages.concat(state.pendingMessages),
           pendingMessages: pop(state.pendingMessages, action.payload),
-        }
+        };
       } else {
         return {
           ...state,
+          failedMessages: push(state.failedMessages, action.payload),
           pendingMessages: pop(state.pendingMessages, action.payload),
-          failedMessages: push(state.failedMessages, action.payload)
-        }
+        };
       }
-    default: break
+    default: break;
   }
 
-  return state
+  return state;
 }
 
 // Helpers
@@ -48,7 +48,7 @@ export function message (state: MessagesStore, action: MessageAction): MessagesS
  * @param item  - New item to add
  */
 function push (source: ReadonlyArray<Message>, item: Message | ConcatArray<Message>) {
-  return source.concat(item) as ReadonlyArray<Message>
+  return source.concat(item) as ReadonlyArray<Message>;
 }
 
 /**
@@ -57,5 +57,5 @@ function push (source: ReadonlyArray<Message>, item: Message | ConcatArray<Messa
  * @param item - Item to remove
  */
 function pop (source: ReadonlyArray<Message>, item: Message) {
-  return source.filter(i => i !== item) as ReadonlyArray<Message>
+  return source.filter(i => i !== item) as ReadonlyArray<Message>;
 }

@@ -3,7 +3,7 @@ import ConnectedChatHistory from 'src/containers/ChatHistory';
 import ConnectedChatInput from 'src/containers/ChatInput';
 
 interface ChatroomState {
-  timestamp: Date
+  timestamp: Date;
 }
 
 export default class Chatroom extends React.Component<object, ChatroomState> {
@@ -13,10 +13,10 @@ export default class Chatroom extends React.Component<object, ChatroomState> {
     super(props);
     this.state = {
       timestamp: new Date(Date.now())
-    }
-  };
+    };
+  }
 
-  render () {
+  public render () {
     return (
       <div>
         <p>Constructed time: {this.state.timestamp.toLocaleString()}</p>
@@ -24,6 +24,6 @@ export default class Chatroom extends React.Component<object, ChatroomState> {
         <ConnectedChatInput />
       </div>
     );
-  };
+  }
 
 }

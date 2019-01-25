@@ -5,6 +5,10 @@
     "tslint-config-prettier"
   ],
   "defaultSeverity": "warning",
+  "rules": {
+    "interface-name": false,
+    "semicolon": true,
+  },
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
