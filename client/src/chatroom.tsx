@@ -3,22 +3,24 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import { MessageAction } from './actions/message';
 import Chatroom from './components/Chatroom';
-import { message } from './reducers/message';
+import rootReducer from './reducers';
 import { MessagesStore } from './types';
 
-const messageStore = createStore<MessagesStore, MessageAction, object, object>(
-  message,
+/** The only store for this application. */
+const store = createStore(
+  rootReducer,
   {
-    failedMessages: [],
-    messages: [],
-    pendingMessages: [],
+    message: {
+      failedMessages: [],
+      messages: [],
+      pendingMessages: [],
+    } as MessagesStore
   }
 );
 
 ReactDOM.render(
-  <Provider store={messageStore}>
+  <Provider store={store}>
     <Chatroom />
   </Provider>,
   document.getElementById('chatroom')

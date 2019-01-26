@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 
 import ChatHistory, { ChatHistoryProps } from 'src/components/ChatHistory';
-import { MessagesStore } from 'src/types';
+import { Store } from 'src/types';
 
-export function mapStateToProps ({ messages, pendingMessages, failedMessages }: MessagesStore): ChatHistoryProps {
+export function mapStateToProps ({ message }: Store): ChatHistoryProps {
   return {
-    failedMessages,
-    messages,
-    pendingMessages,
+    failedMessages: message.failedMessages,
+    messages: message.messages,
+    pendingMessages: message.pendingMessages,
   };
 }
 

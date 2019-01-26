@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as actions from 'src/actions/message';
-import ChatInput, { ChatInputProps } from 'src/components/ChatInput';
+import ChatInput from 'src/components/ChatInput';
 
-function mapDispatchToProps (d: Dispatch<actions.MessageAction>): ChatInputProps {
+function mapDispatchToProps (d: Dispatch<actions.MessageAction>) {
   return {
     submitMessage: (m: string) => d(actions.submit(m))
   };

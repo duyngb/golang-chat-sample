@@ -1,11 +1,15 @@
 import { MessageAction } from 'src/actions/message';
 import { ADD_MESSAGE, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
-import { Message, MessagesStore } from 'src/types';
+import { Message, MessagesStore as MessagesState } from 'src/types';
 
-/**
- * Message reducer.
- */
-export function message (state: MessagesStore, action: MessageAction): MessagesStore {
+const InitialMessagesState: MessagesState = {
+  failedMessages: [],
+  messages: [],
+  pendingMessages: []
+};
+
+/** Message reducer returns new state object based on dispatched action type. */
+export function messageReducer (state: MessagesState = InitialMessagesState, action: MessageAction): MessagesState {
   switch (action.type) {
     case ADD_MESSAGE:
       if (action.payload) {

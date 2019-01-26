@@ -10,11 +10,10 @@ export interface ChatHistoryProps {
 export default class ChatHistory extends React.Component<ChatHistoryProps, object> {
   public render () {
     return (
-      <ul className="list-group list-group-flush"> {
-        this.props.messages.map(m => (
-          <li key={m.timestamp}> {m} </li>
-        ))
-      } </ul>
+      <ul className="list-group list-group-flush">
+        {this.props.messages.map(m => <li key={m.timestamp}>{m.content}</li>)}
+        {this.props.pendingMessages.map(m => <li className="pending" key={m.timestamp}>{m.content}</li>)}
+      </ul>
     );
   }
 }

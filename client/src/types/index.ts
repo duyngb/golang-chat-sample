@@ -22,3 +22,8 @@ export interface MessagesStore {
   /** Messages failed to send, and should be marked to resend or delete. */
   failedMessages: ReadonlyArray<Message>;
 }
+
+/** The only store type for this application. */
+export interface Store {
+  message: Readonly<MessagesStore>;
+}
