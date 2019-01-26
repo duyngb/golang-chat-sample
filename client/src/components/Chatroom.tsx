@@ -6,7 +6,7 @@ import { Message } from 'src/types';
 
 interface IProps {
   wsURL: string;
-  addMessage?: (msg: Message) => AddMessage;
+  addMessage: (msg: Message) => AddMessage;
 }
 
 interface IState {
@@ -49,17 +49,25 @@ export default class Chatroom extends React.Component<IProps, IState> {
 
     ws.onmessage = e => {
       const msg = JSON.parse(e.data) as Message;
-      this.props.addMessage!(msg);
+      this.props.addMessage(msg);
     };
     ws.onopen = _ => { this.setState({ connectionClosed: false }); };
     ws.onclose = _ => {
       const msg: Message = {
         content: 'Connection to socket closed.',
         timestamp: Date.now(),
-        who: 'CONNECTION KEEPER'
+        who: 'CONNECTION'
       };
-      this.props.addMessage!(msg);
+      this.props.addMessage(msg);
       this.setState({ connectionClosed: true });
+    };
+    ws.onerror = _ => {
+      const msg: Message = {
+        content: 'Error when connect to server.',
+        timestamp: Date.now(),
+        who: 'CONNECTION'
+      };
+      this.props.addMessage(msg);
     };
 
     return ws;

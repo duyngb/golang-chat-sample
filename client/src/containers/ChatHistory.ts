@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
-import ChatHistory, { ChatHistoryProps } from 'src/components/ChatHistory';
+import ChatHistory from 'src/components/ChatHistory';
 import { Store } from 'src/types';
 
-function mapStateToProps ({ message }: Store): ChatHistoryProps {
+function mapStateToProps ({ message }: Store) {
   return {
     failedMessages: message.failedMessages,
     messages: message.messages,
