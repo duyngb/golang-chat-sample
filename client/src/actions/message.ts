@@ -39,3 +39,13 @@ export function submit (message: string): SendMessage {
     type: constants.SEND_MESSAGE
   };
 }
+
+/** addMessage announces {@link src/actions/message#AddMessage} action type. */
+export function addMessage (message: Message): AddMessage {
+  return {
+    payload: {
+      ...message
+    },
+    type: constants.ADD_MESSAGE
+  };
+}

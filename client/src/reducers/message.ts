@@ -28,7 +28,7 @@ export function messageReducer (state: MessagesState = InitialMessagesState, act
       if (action.success) {
         return {
           ...state,
-          messages: state.messages.concat(state.pendingMessages),
+          messages: push(state.messages, state.pendingMessages),
           pendingMessages: pop(state.pendingMessages, action.payload),
         };
       } else {

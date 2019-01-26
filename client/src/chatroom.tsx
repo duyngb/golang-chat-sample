@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import Chatroom from './components/Chatroom';
+import ConnectedChatroom from './containers/Chatroom';
 import rootReducer from './reducers';
 import { MessagesStore } from './types';
 
@@ -21,7 +21,7 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <Chatroom />
+    <ConnectedChatroom wsURL="/chatroom/ws" />
   </Provider>,
   document.getElementById('chatroom')
 );

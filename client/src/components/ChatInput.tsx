@@ -1,28 +1,27 @@
 import * as React from "react";
 import { SendMessage } from 'src/actions/message';
 
-export interface ChatInputProps {
+interface ChatInputProps {
   submitMessage: (m: string) => SendMessage;
 }
 
-export default class ChatInput extends React.Component<ChatInputProps> {
-  public state: {
-    message: string
-  };
+interface ChatInputState {
+  message: string;
+}
+
+export default class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
   constructor (props: any) {
     super(props);
 
-    this.state = {
-      message: ''
-    };
+    this.state = { message: '' };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   public handleChange (event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ message: event.target.value });
   }
 
   public handleSubmit (e: React.FormEvent<HTMLFormElement>) {
