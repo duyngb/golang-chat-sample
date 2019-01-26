@@ -2,7 +2,7 @@ import * as React from "react";
 import { SendMessage } from 'src/actions/message';
 
 interface IProps {
-  submitMessage: (ws: WebSocket, m: string) => SendMessage;
+  submitMessage: (m: string) => SendMessage;
   ws: WebSocket;
   connectionClosed: boolean;
 }
@@ -30,7 +30,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
     e.preventDefault();
 
     const { message } = this.state;
-    this.props.submitMessage(this.props.ws, message);
+    this.props.submitMessage(message);
     this.setState({ message: '' });
   }
 
