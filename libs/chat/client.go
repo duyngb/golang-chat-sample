@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"fmt"
 	"time"
 
 	"example.com/socket-server/libs/common"
@@ -21,7 +20,7 @@ const (
 	pingPeriod = (pongWait * 9) / 10
 
 	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	maxMessageSize = 1024
 )
 
 var (
@@ -95,9 +94,12 @@ func (c *Client) ReadPump() {
 			}
 			break
 		}
-		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		message = []byte(fmt.Sprintf("%p: %s", c.conn, message))
-		c.hub.Broadcast(message)
+		message, err = processMessage(c.conn, message)
+		if err != nil {
+			clientLogger.Error(err)
+		} else {
+			c.hub.Broadcast(message)
+		}
 	}
 }
 
