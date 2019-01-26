@@ -1,15 +1,17 @@
 import * as React from "react";
 import { SendMessage } from 'src/actions/message';
 
-interface ChatInputProps {
-  submitMessage: (m: string) => SendMessage;
+interface IProps {
+  submitMessage: (ws: WebSocket, m: string) => SendMessage;
+  ws: WebSocket;
+  connectionClosed: boolean;
 }
 
-interface ChatInputState {
+interface IState {
   message: string;
 }
 
-export default class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
+export default class ChatInput extends React.Component<IProps, IState> {
 
   constructor (props: any) {
     super(props);
@@ -28,17 +30,19 @@ export default class ChatInput extends React.Component<ChatInputProps, ChatInput
     e.preventDefault();
 
     const { message } = this.state;
-    this.props.submitMessage(message);
+    this.props.submitMessage(this.props.ws, message);
     this.setState({ message: '' });
   }
 
   public render () {
     return (
       <form onSubmit={this.handleSubmit} >
-        <input type="text" name="message" id="message"
+        <input type="text" name="message" id="message" autoComplete="off"
           value={this.state.message}
           onChange={this.handleChange} />
-        <input type="submit" value="Submit" disabled={!this.state.message} />
+        <input type="submit" value="Submit"
+          disabled={this.props.connectionClosed || !this.state.message}
+        />
       </form>
     );
   }

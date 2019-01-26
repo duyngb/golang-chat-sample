@@ -22,7 +22,7 @@ export function messageReducer (state: MessagesState = InitialMessagesState, act
     case SEND_MESSAGE:
       return {
         ...state,
-        pendingMessages: push(state.pendingMessages, action.payload)
+        // pendingMessages: push(state.pendingMessages, action.payload),
       };
     case SEND_STATUS:
       if (action.success) {

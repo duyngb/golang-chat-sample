@@ -4,9 +4,13 @@ import { Dispatch } from 'redux';
 import * as actions from 'src/actions/message';
 import ChatInput from 'src/components/ChatInput';
 
-function mapDispatchToProps (d: Dispatch<actions.MessageAction>) {
+function mapDispatchToProps (dispatch: Dispatch<actions.MessageAction>) {
   return {
-    submitMessage: (m: string) => d(actions.submit(m))
+    submitMessage: (ws: WebSocket, m: string) => {
+      const data = actions.submit(m);
+      ws.send(JSON.stringify(data.payload));
+      dispatch(data);
+    }
   };
 }
 
