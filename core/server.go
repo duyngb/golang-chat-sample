@@ -21,14 +21,16 @@ import (
 type Server struct {
 	*echo.Echo
 
-	Hub   *chat.Hub
-	Debug bool
+	Hub                *chat.Hub
+	Debug              bool
+	WithWebpackWatcher bool
 }
 
 // NewServer create an echo server wrapped inside core.Server type.
 func NewServer() *Server {
 	// Check for debug mode based on environment variable
 	isDebug := os.Getenv("SOCK_ENV") != "PRODUCTION"
+	isWithWebpackWatcher := os.Getenv("SOCK_WITH_WEBPACK") != ""
 
 	e := echo.New()
 	h := chat.NewHub()
@@ -64,7 +66,7 @@ func NewServer() *Server {
 	routes.Bind("/chatroom", &routes.ChatRoom{Hub: h}, e)
 
 	// Cast original echo server to our alias
-	return &Server{e, h, isDebug}
+	return &Server{e, h, isDebug, isWithWebpackWatcher}
 }
 
 // Run runs internal echo server.
@@ -80,7 +82,7 @@ func (s *Server) Run() {
 
 	// Start subprocess
 	go func() {
-		if s.Debug {
+		if s.WithWebpackWatcher {
 			watcher = exec.Command("npm", "run", "start")
 
 			watcher.Dir = "./client"
@@ -114,8 +116,10 @@ func (s *Server) Run() {
 		}
 	}()
 
-	s.Logger.Infof("Stopping process %d", watcher.Process.Pid)
-	if err := watcher.Process.Signal(os.Interrupt); err != nil {
-		fmt.Printf("%v\n", err)
+	if s.WithWebpackWatcher {
+		s.Logger.Infof("Stopping process %d", watcher.Process.Pid)
+		if err := watcher.Process.Signal(os.Interrupt); err != nil {
+			fmt.Printf("%v\n", err)
+		}
 	}
 }
