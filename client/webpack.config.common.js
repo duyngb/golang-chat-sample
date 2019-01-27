@@ -58,6 +58,11 @@ module.exports = {
       filename: 'chatroom.html',
       chunks: [ 'runtime', 'vendors', 'chatroom' ]
     } ),
+    new HTMLWebpackPlugin( {
+      template: resolve( 'src', 'chatrooms.html' ),
+      filename: 'chatrooms.html',
+      chunks: []
+    } ),
     new HashedModuleIdsPlugin()
   ]
 };
