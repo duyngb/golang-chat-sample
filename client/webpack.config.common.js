@@ -5,6 +5,7 @@ const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
 
 const resolve = require( './util' ).resolve;
 
+/** @type {import('webpack').Configuration} */
 module.exports = {
   mode: 'development',
   stats: true,
