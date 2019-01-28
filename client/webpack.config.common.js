@@ -3,7 +3,13 @@ const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
 
-const resolve = require( './util' ).resolve;
+const {
+  resolve,
+  getStyleLoaders
+} = require( './util' );
+// style files regexes
+const cssRegex = /\.css$/;
+const sassRegex = /\.(scss|sass)$/;
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -47,7 +53,19 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader'
-      }
+      },
+      {
+        test: cssRegex,
+        use: getStyleLoaders( {
+          importLoaders: 1,
+        } )
+      },
+      {
+        test: sassRegex,
+        use: getStyleLoaders( {
+          importLoaders: 2
+        }, 'sass-loader' ),
+      },
     ]
   },
 
