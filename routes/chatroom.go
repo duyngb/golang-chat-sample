@@ -26,16 +26,16 @@ func (r *ChatRoom) landingPage(c echo.Context) error {
 	// return c.Render(http.StatusOK, "chatroom/chatroom.html", nil)
 }
 
-func (r *ChatRoom) chatroom(c echo.Context) (e error) {
+func (r *ChatRoom) chatroom(c echo.Context) error {
 	var (
 		conn   *websocket.Conn
 		client *chat.Client
 	)
 
-	conn, e = upgrader.Upgrade(c.Response(), c.Request(), nil)
+	conn, e := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if e != nil {
 		c.Logger().Errorf("ws connection upgrade failed: %v", e)
-		return
+		return e
 	}
 
 	client = chat.NewClient(r.Hub, conn)
@@ -46,5 +46,5 @@ func (r *ChatRoom) chatroom(c echo.Context) (e error) {
 	go client.WritePump()
 	go client.ReadPump()
 
-	return
+	return nil
 }
