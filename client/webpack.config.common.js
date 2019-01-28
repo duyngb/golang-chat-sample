@@ -16,7 +16,8 @@ module.exports = {
   mode: 'development',
   stats: true,
   entry: {
-    chatroom: resolve( 'src', 'chatroom.tsx' )
+    chatroom: resolve( 'src', 'chatroom.tsx' ),
+    chatrooms: resolve( 'src', 'chatrooms.ts' ),
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -24,7 +25,7 @@ module.exports = {
   },
 
   optimization: {
-    runtimeChunk: 'single',
+    runtimeChunk: false,
     splitChunks: {
       cacheGroups: {
         vendor: {
@@ -79,7 +80,7 @@ module.exports = {
     new HTMLWebpackPlugin( {
       template: resolve( 'src', 'chatrooms.html' ),
       filename: 'chatrooms.html',
-      chunks: []
+      chunks: [ 'runtime', 'vendors', 'chatrooms' ]
     } ),
     new HashedModuleIdsPlugin()
   ]
