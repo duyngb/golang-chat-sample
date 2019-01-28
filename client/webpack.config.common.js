@@ -75,12 +75,12 @@ module.exports = {
     new HTMLWebpackPlugin( {
       template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
-      chunks: [ 'runtime', 'vendors', 'chatroom' ]
+      chunks: [ 'vendors', 'chatroom' ]
     } ),
     new HTMLWebpackPlugin( {
       template: resolve( 'src', 'chatrooms.html' ),
       filename: 'chatrooms.html',
-      chunks: [ 'runtime', 'vendors', 'chatrooms' ]
+      chunks: [ 'vendors', 'chatrooms' ]
     } ),
     new HashedModuleIdsPlugin()
   ]
