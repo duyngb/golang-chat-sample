@@ -16,6 +16,20 @@ html {
         flex-grow: 1;
         overflow-x: hidden;
         overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #fff;
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
     }
 
     .debug-tools {
