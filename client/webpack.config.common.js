@@ -3,13 +3,20 @@ const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
 
-const {
-  resolve,
-  getStyleLoaders
-} = require( './util' );
-// style files regexes
-const cssRegex = /\.css$/;
-const sassRegex = /\.(scss|sass)$/;
+const resolve = require( './util' ).resolve;
+
+const minify = {
+  removeComments: true,
+  collapseWhitespace: true,
+  removeRedundantAttributes: true,
+  useShortDoctype: true,
+  removeEmptyAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  keepClosingSlash: true,
+  minifyJS: true,
+  minifyCSS: true,
+  minifyURLs: true,
+};
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -18,6 +25,7 @@ module.exports = {
   entry: {
     chatroom: resolve( 'src', 'chatroom.tsx' ),
     chatrooms: resolve( 'src', 'chatrooms.ts' ),
+    react: [ 'react', 'react-dom', 'react-redux' ]
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -25,7 +33,7 @@ module.exports = {
   },
 
   optimization: {
-    runtimeChunk: false,
+    runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
         vendor: {
@@ -56,32 +64,36 @@ module.exports = {
         loader: 'source-map-loader'
       },
       {
-        test: cssRegex,
-        use: getStyleLoaders( {
-          importLoaders: 1,
-        } )
-      },
-      {
-        test: sassRegex,
-        use: getStyleLoaders( {
-          importLoaders: 2
-        }, 'sass-loader' ),
-      },
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
+      }
     ]
   },
 
   plugins: [
     new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
     new HTMLWebpackPlugin( {
+      inject: true,
       template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
-      chunks: [ 'vendors', 'chatroom' ]
+      chunks: [ 'runtime', 'react', 'vendors', 'chatroom' ],
+      minify
     } ),
     new HTMLWebpackPlugin( {
+      inject: true,
       template: resolve( 'src', 'chatrooms.html' ),
       filename: 'chatrooms.html',
-      chunks: [ 'vendors', 'chatrooms' ]
+      chunks: [ 'runtime', 'vendors', 'chatrooms' ],
+      minify
     } ),
     new HashedModuleIdsPlugin()
-  ]
+  ],
+
+  performance: {
+    hints: false
+  }
 };
