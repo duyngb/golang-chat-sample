@@ -6,7 +6,8 @@
     "build": "webpack-cli --config webpack.config.prod.js",
     "builddev": "webpack-cli --config webpack.config.dev.js",
     "start": "webpack-cli -w --config webpack.config.dev.js",
-    "lint": "tslint --project ./tsconfig.json"
+    "lint": "tslint --project ./tsconfig.json",
+    "serve": "webpack-dev-server --config webpack.config.dev.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "typescript": "^3.2.4",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1"
   }
 }
