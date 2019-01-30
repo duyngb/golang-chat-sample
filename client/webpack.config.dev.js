@@ -15,7 +15,6 @@ module.exports = merge( common, {
     proxy: {
       '/chatroom/ws': {
         target: 'ws://localhost:8000',
-        changeOrigin: true,
         ws: true
       }
     }
