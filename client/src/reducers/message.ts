@@ -1,5 +1,5 @@
 import { MessageAction } from 'src/actions/message';
-import { ADD_MESSAGE, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
+import { ADD_MESSAGE, CLEAR_MESSAGES, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
 import { Message, MessagesStore as MessagesState } from 'src/types';
 
 const InitialMessagesState: MessagesState = {
@@ -38,6 +38,11 @@ export function messageReducer (state: MessagesState = InitialMessagesState, act
           pendingMessages: pop(state.pendingMessages, action.payload),
         };
       }
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        messages: []
+      };
     default: break;
   }
 

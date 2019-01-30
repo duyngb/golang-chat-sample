@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Message } from 'src/types';
+import MessagePiece from './Message.component';
 
 export interface ChatHistoryProps {
   messages: ReadonlyArray<Message>;
@@ -10,10 +11,9 @@ export interface ChatHistoryProps {
 export default class ChatHistory extends React.Component<ChatHistoryProps, object> {
   public render () {
     return (
-      <ul className="list-group list-group-flush">
-        {this.props.messages.map(m => <li key={m.timestamp}>{m.who}: {m.content}</li>)}
-        {this.props.pendingMessages.map(m => <li className="pending" key={m.timestamp}>{m.content}</li>)}
-      </ul>
+      <div className="content messages">
+        {this.props.messages.map(m => <MessagePiece key={m.timestamp} message={m} />)}
+      </div>
     );
   }
 }

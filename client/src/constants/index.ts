@@ -6,3 +6,6 @@ export type SEND_MESSAGE = typeof SEND_MESSAGE;
 
 export const SEND_STATUS = 'SENT_STATUS';
 export type SEND_STATUS = typeof SEND_STATUS;
+
+export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
+export type CLEAR_MESSAGES = typeof CLEAR_MESSAGES;

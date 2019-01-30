@@ -7,6 +7,9 @@ import ConnectedChatroom from './containers/Chatroom';
 import rootReducer from './reducers';
 import { MessagesStore } from './types';
 
+// Load style
+import 'src/styles/chatroom.scss';
+
 /** The only store for this application. */
 const store = createStore(
   rootReducer,
