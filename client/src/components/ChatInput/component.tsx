@@ -162,7 +162,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
 
   private sockCloseHandler = (_: CloseEvent) => {
     const msg: Message = {
-      content: 'Connection to socket closed.',
+      content: 'Connection to server closed.',
       event: E_NULL_EVENT,
       timestamp: Date.now(),
       who: CLIENT_INTERNAL
@@ -181,22 +181,45 @@ export default class ChatInput extends React.Component<IProps, IState> {
     this.props.addMessage(msg);
   }
 
+  private closeSockConn = () => new Promise((resolve, reject) => {
+    this.state.ws.close(1000);
+
+    // Reject if could not close sock conn after 5s.
+    const t = setTimeout(() => reject(), 5000);
+    // Check connection state every 10ms.
+    const i = setInterval((ws: WebSocket) => {
+      if (ws.readyState === WebSocket.CLOSED) {
+        clearTimeout(t);
+        clearTimeout(i);
+        return resolve();
+      }
+    }, 10, this.state.ws);
+  })
+
   private terminate = (_: React.MouseEvent) => {
     this.state.ws.close(1000);
   }
 
   private reconnect = (_: React.MouseEvent) => {
-    if (this.state.ws.readyState <= WebSocket.OPEN) {
-      this.terminate(_);
-    }
-    this.props.addMessage({
-      content: 'Reconnecting to server...',
-      event: E_NULL_EVENT,
-      timestamp: Date.now(),
-      who: CLIENT_INTERNAL
-    });
-    const ws = this.constructWSConn();
-    this.setState({ ws });
+    this.closeSockConn()
+      .then(() => {
+        this.props.addMessage({
+          content: 'Reconnecting to server...',
+          event: E_NULL_EVENT,
+          timestamp: Date.now(),
+          who: CLIENT_INTERNAL
+        });
+        const ws = this.constructWSConn();
+        this.setState({ ws });
+      })
+      .catch(() => {
+        this.props.addMessage({
+          content: 'Failed to alter connection to server.',
+          event: E_NULL_EVENT,
+          timestamp: Date.now(),
+          who: CLIENT_INTERNAL
+        });
+      });
   }
 
   private broadcastDummyMessages = (_: React.MouseEvent) => {
