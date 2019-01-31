@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import ChatHistory from 'src/components/ChatHistory';
 import { Store } from 'src/types';
+import ChatHistory from './component';
 
 function mapStateToProps ({ message }: Store) {
   return {

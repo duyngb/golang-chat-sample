@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { createStore } from 'redux';
-import ConnectedChatroom from './containers/Chatroom';
+import ConnectedChatroom from './components/Chatroom';
 import rootReducer from './reducers';
 import { MessagesStore } from './types';
 

@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { AddMessage, DClearMessages } from 'src/actions/message';
-import ConnectedChatHistory from 'src/containers/ChatHistory';
-import ConnectedChatInput from 'src/containers/ChatInput';
+import ConnectedChatHistory from 'src/components/ChatHistory';
+import ConnectedChatInput from 'src/components/ChatInput';
+import { E_NULL_EVENT } from 'src/constants';
 import { Message } from 'src/types';
 
 interface IProps {
   wsURL: string;
+  username?: string;
   addMessage: (msg: Message) => AddMessage;
   clearMessages: () => DClearMessages;
 }
@@ -55,19 +57,34 @@ export default class Chatroom extends React.Component<IProps, IState> {
       const msg = JSON.parse(e.data) as Message;
       this.props.addMessage(msg);
     };
-    ws.onopen = _ => { this.setState({ connectionClosed: false }); };
+
+    ws.onopen = _ => {
+      const msg: Message = {
+        content: 'Connected to server.',
+        event: E_NULL_EVENT,
+        timestamp: Date.now(),
+        who: CLIENT_INTERNAL
+      };
+      this.props.addMessage(msg);
+
+      this.setState({ connectionClosed: false });
+    };
+
     ws.onclose = _ => {
       const msg: Message = {
         content: 'Connection to socket closed.',
+        event: E_NULL_EVENT,
         timestamp: Date.now(),
         who: CLIENT_INTERNAL
       };
       this.props.addMessage(msg);
       this.setState({ connectionClosed: true });
     };
+
     ws.onerror = _ => {
       const msg: Message = {
         content: 'Error when connect to server.',
+        event: E_NULL_EVENT,
         timestamp: Date.now(),
         who: CLIENT_INTERNAL
       };
@@ -87,6 +104,7 @@ export default class Chatroom extends React.Component<IProps, IState> {
     }
     this.props.addMessage({
       content: 'Reconnecting to server...',
+      event: E_NULL_EVENT,
       timestamp: Date.now(),
       who: CLIENT_INTERNAL
     });
@@ -98,6 +116,7 @@ export default class Chatroom extends React.Component<IProps, IState> {
     for (let i = 0; i < 10; i++) {
       this.props.addMessage({
         content: `Dummy message #${i}`,
+        event: E_NULL_EVENT,
         timestamp: Date.now() + 1000 * i,
         who: 'me'
       });

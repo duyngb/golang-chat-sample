@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { addMessage, clearMessages, MessageAction } from 'src/actions/message';
-import Chatroom from 'src/components/Chatroom';
+import Chatroom from 'src/components/Chatroom/component';
 import { Message } from 'src/types';
 
 function mapDispatchToProps (dispatch: Dispatch<MessageAction>) {

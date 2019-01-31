@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { MessageAction, submit } from 'src/actions/message';
-import ChatInput from 'src/components/ChatInput';
+import ChatInput from './component';
 
 interface OwnProps {
   ws: WebSocket;

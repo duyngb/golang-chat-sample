@@ -37,6 +37,9 @@ export default class ChatInput extends React.Component<IProps, IState> {
   public render () {
     return (
       <form onSubmit={this.handleSubmit} className="field has-addons message-input">
+        <div className="control">
+          <input type="text" className="input" id="username" autoComplete="off" />
+        </div>
         <div className="control is-expanded">
           <input className="input" type="text" name="message" id="message" autoComplete="off"
             placeholder="Broadcast your voice."
