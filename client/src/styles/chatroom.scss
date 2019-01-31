@@ -1,5 +1,13 @@
 @charset "utf-8";
-@import "~bulma/bulma";
+
+@import "~bulma/sass/utilities/_all";
+@import "~bulma/sass/base/_all";
+@import "~bulma/sass/components/message";
+@import "~bulma/sass/elements/button";
+@import "~bulma/sass/elements/container";
+@import "~bulma/sass/elements/form";
+@import "~bulma/sass/elements/notification";
+@import "~bulma/sass/elements/tag";
 
 $message-margin: 1rem;
 
@@ -12,10 +20,11 @@ html {
     display: flex;
     flex-direction: column;
 
-    .messages {
+    &>.messages {
         flex-grow: 1;
         overflow-x: hidden;
         overflow-y: scroll;
+        padding-bottom: 0.5rem;
 
         &::-webkit-scrollbar {
             width: 10px;
@@ -32,15 +41,15 @@ html {
         }
     }
 
-    .debug-tools {
-        flex: 0 0 auto;
-    }
-
-    .message-input {
+    &>.message-input {
         flex: 0 0 auto;
         padding: $message-margin / 2;
         background: #000;
     }
+}
+
+.message:not(:last-child) {
+    margin-bottom: $message-margin/2;
 }
 
 .message-piece {
