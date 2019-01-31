@@ -16,6 +16,12 @@ module.exports = merge( common, {
       '/chatroom/ws': {
         target: 'ws://localhost:8000',
         ws: true
+      },
+      '/chatroom': {
+        target: 'http://localhost:8080',
+        pathRewrite: {
+          '/chatroom$': '/chatroom.html'
+        }
       }
     }
   },
