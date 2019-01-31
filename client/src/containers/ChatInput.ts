@@ -1,12 +1,21 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as actions from 'src/actions/message';
+import { MessageAction, submit } from 'src/actions/message';
 import ChatInput from 'src/components/ChatInput';
 
-function mapDispatchToProps (d: Dispatch<actions.MessageAction>) {
+interface OwnProps {
+  ws: WebSocket;
+  connectionClosed: boolean;
+}
+
+function mapDispatchToProps (dispatch: Dispatch<MessageAction>, ownProps: OwnProps) {
   return {
-    submitMessage: (m: string) => d(actions.submit(m))
+    submitMessage: (m: string) => {
+      const data = submit(m);
+      ownProps.ws.send(JSON.stringify(data.payload));
+      dispatch(data);
+    }
   };
 }
 

@@ -1,0 +1,57 @@
+@charset "utf-8";
+@import "~bulma/bulma";
+
+$message-margin: 1rem;
+
+html {
+    overflow: hidden;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .messages {
+        flex-grow: 1;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #fff;
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+    }
+
+    .debug-tools {
+        flex: 0 0 auto;
+    }
+
+    .message-input {
+        flex: 0 0 auto;
+        padding: $message-margin / 2;
+        background: #000;
+    }
+}
+
+.message-piece {
+    margin-left: $message-margin;
+    margin-right: $message-margin;
+
+    .message-header {
+        padding: 0.25em 1em;
+    }
+
+    .message-body {
+        padding: 0.25em 1.25em;
+    }
+}

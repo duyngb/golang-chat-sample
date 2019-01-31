@@ -5,11 +5,27 @@ const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
 
 const resolve = require( './util' ).resolve;
 
+const minify = {
+  removeComments: true,
+  collapseWhitespace: true,
+  removeRedundantAttributes: true,
+  useShortDoctype: true,
+  removeEmptyAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  keepClosingSlash: true,
+  minifyJS: true,
+  minifyCSS: true,
+  minifyURLs: true,
+};
+
+/** @type {import('webpack').Configuration} */
 module.exports = {
   mode: 'development',
   stats: true,
   entry: {
-    chatroom: resolve( 'src', 'chatroom.tsx' )
+    chatroom: resolve( 'src', 'chatroom.tsx' ),
+    chatrooms: resolve( 'src', 'chatrooms.ts' ),
+    react: [ 'react', 'react-dom', 'react-redux' ]
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -46,6 +62,14 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader'
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
       }
     ]
   },
@@ -53,10 +77,23 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
     new HTMLWebpackPlugin( {
+      inject: true,
       template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
-      chunks: [ 'runtime', 'vendors', 'chatroom' ]
+      chunks: [ 'runtime', 'react', 'vendors', 'chatroom' ],
+      minify
+    } ),
+    new HTMLWebpackPlugin( {
+      inject: true,
+      template: resolve( 'src', 'chatrooms.html' ),
+      filename: 'chatrooms.html',
+      chunks: [ 'runtime', 'vendors', 'chatrooms' ],
+      minify
     } ),
     new HashedModuleIdsPlugin()
-  ]
+  ],
+
+  performance: {
+    hints: false
+  }
 };

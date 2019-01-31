@@ -2,7 +2,9 @@
 package chat
 
 import (
+	"encoding/json"
 	"fmt"
+	"time"
 
 	"example.com/socket-server/libs/common"
 	"github.com/labstack/gommon/log"
@@ -50,12 +52,12 @@ func (h *Hub) Run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			hubLogger.Debugf("New client registered: %p", client.conn)
-			go h.Broadcast(msgFmt("New client join: %p", client.conn))
+			go h.Announce("New client joined: %p", client.conn)
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
-				delete(h.clients, client) // Remove client from registered list
-				close(client.send)
-				go h.Broadcast(msgFmt("Client %p leave", client.conn))
+				delete(h.clients, client) // <- Remove client from registered list
+				close(client.send)        // <- Close send channel
+				go h.Announce("Client %p leaved.", client.conn)
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
@@ -76,6 +78,16 @@ func (h *Hub) Broadcast(message []byte) {
 	h.broadcast <- message
 }
 
-func msgFmt(format string, a ...interface{}) []byte {
-	return []byte(fmt.Sprintf(format, a...))
+// Announce broadcasts message on behalf of announcer
+func (h *Hub) Announce(format string, a ...interface{}) {
+	msg, err := json.Marshal(MessageFrame{
+		int(time.Now().UnixNano() / 1e6),
+		fmt.Sprintf(format, a...),
+		"Announcement",
+	})
+	if err != nil {
+		hubLogger.Error(err)
+		return
+	}
+	h.Broadcast(msg)
 }

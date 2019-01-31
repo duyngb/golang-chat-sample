@@ -1,5 +1,5 @@
 import { MessageAction } from 'src/actions/message';
-import { ADD_MESSAGE, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
+import { ADD_MESSAGE, CLEAR_MESSAGES, SEND_MESSAGE, SEND_STATUS } from 'src/constants';
 import { Message, MessagesStore as MessagesState } from 'src/types';
 
 const InitialMessagesState: MessagesState = {
@@ -22,13 +22,13 @@ export function messageReducer (state: MessagesState = InitialMessagesState, act
     case SEND_MESSAGE:
       return {
         ...state,
-        pendingMessages: push(state.pendingMessages, action.payload)
+        // pendingMessages: push(state.pendingMessages, action.payload),
       };
     case SEND_STATUS:
       if (action.success) {
         return {
           ...state,
-          messages: state.messages.concat(state.pendingMessages),
+          messages: push(state.messages, state.pendingMessages),
           pendingMessages: pop(state.pendingMessages, action.payload),
         };
       } else {
@@ -38,6 +38,11 @@ export function messageReducer (state: MessagesState = InitialMessagesState, act
           pendingMessages: pop(state.pendingMessages, action.payload),
         };
       }
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        messages: []
+      };
     default: break;
   }
 

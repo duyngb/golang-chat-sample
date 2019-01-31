@@ -13,7 +13,21 @@ function resolve( ...segments ) {
   return path.resolve( __dirname, ...segments );
 }
 
+function getStyleLoaders( cssLoaderOptions, preProcessor ) {
+  let loaders = [
+    require.resolve( 'style-loader' ),
+    {
+      loader: require.resolve( 'css-loader' ),
+      options: cssLoaderOptions,
+    }
+  ];
+  if ( preProcessor ) {
+    loaders.push( require.resolve( preProcessor ) );
+  }
+  return loaders;
+}
 
 module.exports = {
-  resolve
+  resolve,
+  getStyleLoaders
 };

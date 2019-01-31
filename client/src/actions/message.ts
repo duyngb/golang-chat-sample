@@ -17,6 +17,10 @@ export interface SentStatus {
   success: boolean;
 }
 
+export interface DClearMessages {
+  type: constants.CLEAR_MESSAGES;
+}
+
 /**
  * MessageAction type is an action related to manage message state
  * in current chat log.
@@ -24,9 +28,10 @@ export interface SentStatus {
  * All action type are defined in {@link constants}.
  */
 export type MessageAction = (
-  AddMessage |
-  SendMessage |
-  SentStatus
+  | AddMessage
+  | SendMessage
+  | SentStatus
+  | DClearMessages
 );
 
 export function submit (message: string): SendMessage {
@@ -37,5 +42,22 @@ export function submit (message: string): SendMessage {
       who: 'me'
     },
     type: constants.SEND_MESSAGE
+  };
+}
+
+/** addMessage announces {@link src/actions/message#AddMessage} action type. */
+export function addMessage (message: Message): AddMessage {
+  return {
+    payload: {
+      ...message
+    },
+    type: constants.ADD_MESSAGE
+  };
+}
+
+/** Debug clearMessages function sends instruction to clear all messages in local store. */
+export function clearMessages (): DClearMessages {
+  return {
+    type: constants.CLEAR_MESSAGES
   };
 }
