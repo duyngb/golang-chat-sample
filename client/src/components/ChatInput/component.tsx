@@ -196,11 +196,23 @@ export default class ChatInput extends React.Component<IProps, IState> {
     }, 10, this.state.ws);
   })
 
-  private terminate = (_: React.MouseEvent) => {
-    this.state.ws.close(1000);
+  private terminate = (e: React.MouseEvent) => {
+    const target = e.currentTarget;
+    target.classList.add('is-loading');
+    this.closeSockConn()
+      .catch(() => this.props.addMessage({
+        content: 'Failed to close connection to server.',
+        event: E_NULL_EVENT,
+        timestamp: Date.now(),
+        who: CLIENT_INTERNAL
+      }))
+      .then(() => target.classList.remove('is-loading'));
   }
 
-  private reconnect = (_: React.MouseEvent) => {
+  private reconnect = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget;
+    target.classList.add('is-loading');
+
     this.closeSockConn()
       .then(() => {
         this.props.addMessage({
@@ -212,14 +224,13 @@ export default class ChatInput extends React.Component<IProps, IState> {
         const ws = this.constructWSConn();
         this.setState({ ws });
       })
-      .catch(() => {
-        this.props.addMessage({
-          content: 'Failed to alter connection to server.',
-          event: E_NULL_EVENT,
-          timestamp: Date.now(),
-          who: CLIENT_INTERNAL
-        });
-      });
+      .catch(() => this.props.addMessage({
+        content: 'Failed to alter connection to server.',
+        event: E_NULL_EVENT,
+        timestamp: Date.now(),
+        who: CLIENT_INTERNAL
+      }))
+      .then(() => target.classList.remove('is-loading'));
   }
 
   private broadcastDummyMessages = (_: React.MouseEvent) => {
