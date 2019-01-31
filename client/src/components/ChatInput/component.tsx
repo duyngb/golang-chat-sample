@@ -64,26 +64,33 @@ export default class ChatInput extends React.Component<IProps, IState> {
             </div>
             <div className="control">
               <input type="submit" value="Show my name"
+                disabled={!this.state.username}
                 className="button is-primary" />
             </div>
           </form>}
 
         {this.state.registered &&
           // Registered state implicitly has available connection.
-          <form onSubmit={this.handleSubmit} className="field has-addons">
-            <div className="control is-expanded">
-              <input type="text" name="message" id="message"
-                autoComplete="off"
-                placeholder="Broadcast your voice."
-                className="input"
-                value={this.state.message}
-                onChange={this.handleChange}
-                disabled={!this.state.registered} />
+          <form onSubmit={this.handleSubmit}>
+            <div className="field">
+              <span className="has-text-light">Broadcast under name&nbsp;</span>
+              <span className="tag is-light">{this.state.username}</span>
             </div>
-            <div className="control">
-              <input type="submit" id="submit" value="SEND"
-                className="button is-success"
-                disabled={!this.state.message} />
+            <div className="field has-addons">
+              <div className="control is-expanded">
+                <input type="text" name="message" id="message"
+                  autoComplete="off"
+                  placeholder="Broadcast your voice."
+                  className="input"
+                  value={this.state.message}
+                  onChange={this.handleChange}
+                  disabled={!this.state.registered} />
+              </div>
+              <div className="control">
+                <input type="submit" id="submit" value="SEND"
+                  className="button is-success"
+                  disabled={!this.state.message} />
+              </div>
             </div>
           </form>}
 
