@@ -3,7 +3,6 @@ package chat
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"example.com/socket-server/libs/common"
@@ -52,12 +51,12 @@ func (h *Hub) Run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			hubLogger.Debugf("New client registered: %p", client.conn)
-			go h.Announce("New client joined: %s", client.name)
+			go h.Announce(ClientJoined, client.name)
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client) // <- Remove client from registered list
 				close(client.send)        // <- Close send channel
-				go h.Announce("Client %s leaved.", client.name)
+				go h.Announce(ClientLeaved, client.name)
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
@@ -79,13 +78,13 @@ func (h *Hub) Broadcast(message []byte) {
 	h.broadcast <- message
 }
 
-// Announce broadcasts message on behalf of announcer
-func (h *Hub) Announce(format string, a ...interface{}) {
+// Announce broadcasts annoucement message to all registered clients.
+func (h *Hub) Announce(e Event, content string) {
 	msg, err := json.Marshal(Frame{
-		ServerAnnoucement,
-		int(time.Now().UnixNano() / 1e6),
-		fmt.Sprintf(format, a...),
-		"Announcement",
+		Event:     e,
+		Timestamp: int(time.Now().UnixNano() / 1e6),
+		Content:   content,
+		Who:       "Announcement",
 	})
 	if err != nil {
 		hubLogger.Error(err)
