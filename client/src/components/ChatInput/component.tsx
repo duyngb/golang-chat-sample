@@ -50,21 +50,22 @@ export default class ChatInput extends React.Component<IProps, IState> {
             onClick={this.clearMessages} >Clear messages</button>
         </div>
 
-        {!this.state.registered && !this.state.connectionClosed &&
-          // Not registered and has avaiable connection
+        {!this.state.registered &&
+          // Not registered
           <form className="field has-addons"
             onSubmit={this.registerUsername}>
             <div className="control is-expanded">
               <input type="text" name="username" id="username"
                 autoComplete="off"
                 placeholder="Your display name"
+                disabled={this.state.connectionClosed}
                 value={this.state.username}
                 onChange={this.handleUsernameChange}
                 className="input" />
             </div>
             <div className="control">
               <input type="submit" value="Show my name"
-                disabled={!this.state.username}
+                disabled={!this.state.username || this.state.connectionClosed}
                 className="button is-primary" />
             </div>
           </form>}
