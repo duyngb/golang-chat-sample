@@ -1,6 +1,8 @@
 package chat
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"example.com/socket-server/libs/common"
@@ -41,6 +43,11 @@ type Client struct {
 	// The websocket connection.
 	conn *websocket.Conn
 
+	// Client display name, set by the client with REGISTER message.
+	// By default, on creation, this is set by internal address of
+	// socket connection.
+	name string
+
 	// Buffered channel of outbound messages.
 	//
 	// Read from this channel to receive send request from hub
@@ -60,6 +67,7 @@ func NewClient(hub *Hub, conn *websocket.Conn) *Client {
 	return &Client{
 		hub:          hub,
 		conn:         conn,
+		name:         fmt.Sprintf("%p", conn)[2:8],
 		send:         make(chan []byte, 255),
 		Disconnected: make(chan bool),
 	}
@@ -94,10 +102,24 @@ func (c *Client) ReadPump() {
 			}
 			break
 		}
-		message, err = processMessage(c.conn, message)
+		var m Frame
+		err = json.Unmarshal(message, &m)
 		if err != nil {
 			clientLogger.Error(err)
-		} else {
+			continue
+		}
+
+		switch m.Event {
+		case UserRegister:
+			c.name = fmt.Sprintf("%s", m.Content)
+			c.Register()
+		case UserMessage:
+			m.Who = c.name
+			message, err = json.Marshal(&m)
+			if err != nil {
+				clientLogger.Error(err)
+				break
+			}
 			c.hub.Broadcast(message)
 		}
 	}

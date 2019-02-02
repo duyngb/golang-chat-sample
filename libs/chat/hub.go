@@ -52,12 +52,12 @@ func (h *Hub) Run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			hubLogger.Debugf("New client registered: %p", client.conn)
-			go h.Announce("New client joined: %p", client.conn)
+			go h.Announce("New client joined: %s", client.name)
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client) // <- Remove client from registered list
 				close(client.send)        // <- Close send channel
-				go h.Announce("Client %p leaved.", client.conn)
+				go h.Announce("Client %s leaved.", client.name)
 			}
 		case message := <-h.broadcast:
 			for client := range h.clients {
@@ -65,6 +65,7 @@ func (h *Hub) Run() {
 				case client.send <- message:
 					hubLogger.Debugf("send %p <- %s", client.conn, message)
 				default:
+					// Fallback when failed to send, e.g., connection closed by client.
 					close(client.send)
 					delete(h.clients, client)
 				}
@@ -80,7 +81,8 @@ func (h *Hub) Broadcast(message []byte) {
 
 // Announce broadcasts message on behalf of announcer
 func (h *Hub) Announce(format string, a ...interface{}) {
-	msg, err := json.Marshal(MessageFrame{
+	msg, err := json.Marshal(Frame{
+		ServerAnnoucement,
 		int(time.Now().UnixNano() / 1e6),
 		fmt.Sprintf(format, a...),
 		"Announcement",

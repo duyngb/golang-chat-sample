@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Message } from 'src/types';
-import MessagePiece from './Message.component';
+import MessagePiece from '../MessagePiece/component';
 
 export interface ChatHistoryProps {
   messages: ReadonlyArray<Message>;

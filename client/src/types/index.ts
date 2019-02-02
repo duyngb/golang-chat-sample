@@ -1,7 +1,11 @@
+import { MessageEvent } from 'src/constants';
+
 /**
  * Message interface represents a message piece exchanged with server.
  */
 export interface Message {
+  /** Message event type to send to server. */
+  event: MessageEvent;
   /** Timestamp of this message */
   timestamp: number;
   /** Sender identity. This property should be set by the server only. */

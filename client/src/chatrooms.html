@@ -11,18 +11,35 @@
           href="/favicon.png"
           type="image/x-icon">
     <title>Simultaneous Chatrooms</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-item {
+            flex-grow: 1;
+        }
+
+        iframe {
+            border: 1px solid yellowgreen;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="full-row">
-        <div class="col">
-            <iframe src="./chatroom"
-                    frameborder="0"></iframe>
-        </div>
-        <div class="col">
-            <iframe src="./chatroom"
-                    frameborder="0"></iframe>
-        </div>
+<body class="flex">
+    <div class="flex flex-item">
+        <iframe src="./chatroom"
+                class="flex-item"></iframe>
+        <iframe src="./chatroom"
+                class="flex-item"></iframe>
     </div>
 </body>
 

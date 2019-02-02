@@ -39,7 +39,7 @@ func (r *ChatRoom) chatroom(c echo.Context) error {
 	}
 
 	client = chat.NewClient(r.Hub, conn)
-	client.Register()
+	// client.Register()
 
 	// Allow collection of memory referenced by the caller
 	// by doing all work in new goroutines.

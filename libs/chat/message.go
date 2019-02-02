@@ -1,32 +1,21 @@
 package chat
 
-import (
-	"encoding/json"
-	"fmt"
+// Event defines custom type for message Event field.
+// Each server message MUST containt exactly one event type.
+type Event int
 
-	"github.com/gorilla/websocket"
+// Message event type definitions.
+const (
+	_ Event = iota + 0
+	UserRegister
+	UserMessage
+	ServerAnnoucement
 )
 
-// MessageFrame defines message structure for each chat packet.
-type MessageFrame struct {
+// Frame defines a message structure for each chat packet.
+type Frame struct {
+	Event     Event  `json:"event"`
 	Timestamp int    `json:"timestamp"`
 	Content   string `json:"content"`
 	Who       string `json:"who"`
-}
-
-func processMessage(connAddr *websocket.Conn, message []byte) ([]byte, error) {
-	var m MessageFrame
-	err := json.Unmarshal(message, &m)
-	if err != nil {
-		return nil, err
-	}
-
-	// Update MessageFrame.Who field
-	m.Who = fmt.Sprintf("%p", connAddr)
-
-	final, err := json.Marshal(&m)
-	if err != nil {
-		return nil, err
-	}
-	return final, err
 }
