@@ -29,23 +29,23 @@ export const SERVER_ANNOUNCE = 'ANNO';
 export type SERVER_ANNOUNCE = typeof SERVER_ANNOUNCE;
 
 /** Internal events */
-export type InternalEvents = CLIENT_EVENT;
+export type InternalEvent = CLIENT_EVENT;
 
-/** Current client message events */
-export type SelfEvents = (
+/** This client message send to server */
+export type SelfEvent = (
   | CLIENT_REGISTER
   | CLIENT_MESSAGE
 );
 
 /** Server annoucement events */
-export type ServerEvents = (
+export type ServerEvent = (
   | CLIENT_JOINED
   | CLIENT_LEAVED
   | SERVER_ANNOUNCE
 );
 
 export type MessageEvent = (
-  | InternalEvents
-  | SelfEvents
-  | ServerEvents
+  | InternalEvent
+  | SelfEvent
+  | ServerEvent
 );

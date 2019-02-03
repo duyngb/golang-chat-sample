@@ -5,7 +5,7 @@ interface IProps {
   message: Message;
 }
 
-export default class MessagePiece extends React.Component<IProps, object> {
+export default class MessageLine extends React.Component<IProps, object> {
   public render () {
     return (
       <div className="message message-piece">
