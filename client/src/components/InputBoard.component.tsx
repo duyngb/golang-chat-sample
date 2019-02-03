@@ -14,6 +14,7 @@ interface IProps {
 }
 
 interface IState {
+  autosendTimer: number | null;
   connectionClosed: boolean;
   message: string;
   registered: boolean;
@@ -27,6 +28,7 @@ export default class InputBoard extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      autosendTimer: null,
       connectionClosed: true,
       message: '',
       registered: false,
@@ -48,9 +50,9 @@ export default class InputBoard extends React.Component<IProps, IState> {
             onClick={this.broadcastDummyMessages} >Create dummy messages</button>
           <button className="button is-small"
             onClick={this.clearMessages} >Clear messages</button>
-          <div className="button is-small is-disabled">
-            Auto send messages
-          </div>
+          <button className="button is-small is-disabled toggleable"
+            disabled={!this.state.registered}
+            onClick={this.toggleAutosend} >Auto send messages</button>
         </div>
 
         {!this.state.registered &&
@@ -198,7 +200,7 @@ export default class InputBoard extends React.Component<IProps, IState> {
         clearTimeout(i);
         return resolve();
       }
-    }, 10, this.state.ws);
+    }, 100, this.state.ws);
   })
 
   private terminate = (e: React.MouseEvent) => {
@@ -251,5 +253,43 @@ export default class InputBoard extends React.Component<IProps, IState> {
 
   private clearMessages = (_: React.MouseEvent) => {
     this.props.clearMessages();
+  }
+
+  private send = (m: string) => {
+    const d = this.props.submitMessage(m);
+    this.state.ws.send(JSON.stringify(d.payload));
+  }
+
+  private toggleAutosend = (e: React.MouseEvent) => {
+    const t = e.currentTarget;
+    let content: string;
+
+    t.classList.toggle('is-info');
+
+    if (t.classList.contains('is-info')) {
+      content = 'Starting auto-send...';
+
+      const autosendTimer = window.setInterval(
+        this.send,
+        5000,
+        'Yet an auto message from somewhere!');
+
+      this.setState({ autosendTimer });
+
+    } else {
+      content = 'Stopping auto-send...';
+
+      window.clearInterval(this.state.autosendTimer!);
+
+      this.setState({ autosendTimer: null });
+    }
+
+    this.props.addMessage({
+      content,
+      event: CLIENT_EVENT,
+      timestamp: Date.now(),
+      who: 'me'
+    });
+
   }
 }

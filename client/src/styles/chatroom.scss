@@ -97,3 +97,7 @@ html {
         }
     }
 }
+
+.toggleable {
+    transition: background-color 0.5s linear;
+}

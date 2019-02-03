@@ -9,7 +9,7 @@ function mapDispatchToProps (dispatch: Dispatch<MessageAction>) {
   return {
     addMessage: (m: Message) => dispatch(addMessage(m)),
     clearMessages: () => dispatch(clearMessages()),
-    submitMessage: (m: string) => dispatch(submit(m)),
+    submitMessage: (m: string) => submit(m),
   };
 }
 
