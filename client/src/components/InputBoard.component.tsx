@@ -48,6 +48,9 @@ export default class InputBoard extends React.Component<IProps, IState> {
             onClick={this.broadcastDummyMessages} >Create dummy messages</button>
           <button className="button is-small"
             onClick={this.clearMessages} >Clear messages</button>
+          <div className="button is-small is-disabled">
+            Auto send messages
+          </div>
         </div>
 
         {!this.state.registered &&

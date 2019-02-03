@@ -5,15 +5,10 @@ import (
 	"encoding/json"
 	"time"
 
-	"example.com/socket-server/libs/common"
-	"github.com/labstack/gommon/log"
+	"example.com/socket-server/libs/log"
 )
 
-var hubLogger = log.New("hub")
-
-func init() {
-	hubLogger.SetHeader(common.LogHeader)
-}
+var hubLogger = log.NewLogger("hub")
 
 // Hub maintains the set of active clients and broadcasts
 // messages to the clients.
@@ -62,7 +57,7 @@ func (h *Hub) Run() {
 			for client := range h.clients {
 				select {
 				case client.send <- message:
-					hubLogger.Debugf("send %p <- %s", client.conn, message)
+					hubLogger.Debugf("send -> %s", client.name)
 				default:
 					// Fallback when failed to send, e.g., connection closed by client.
 					close(client.send)
