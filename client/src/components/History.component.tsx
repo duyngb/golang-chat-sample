@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { CLIENT_MESSAGE } from 'src/constants';
 import { Message } from 'src/types';
-import MessageLine from '../MessageLine/component';
-import NotificationLine from '../NotificationLine/component';
+import MessageLine from './MessageLine.component';
+import NotificationLine from './NotificationLine.component';
 
 export interface ChatHistoryProps {
   messages: ReadonlyArray<Message>;
 }
 
-export default class ChatHistory extends React.Component<ChatHistoryProps, object> {
+export default class History extends React.Component<ChatHistoryProps, object> {
   public render () {
     return (
       <div className="content messages">

@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 
 import { addMessage, clearMessages, MessageAction, submit } from 'src/actions/message';
 import { Message } from 'src/types';
-import ChatInput from './component';
+import InputBoard from './InputBoard.component';
 
 function mapDispatchToProps (dispatch: Dispatch<MessageAction>) {
   return {
@@ -13,9 +13,9 @@ function mapDispatchToProps (dispatch: Dispatch<MessageAction>) {
   };
 }
 
-const ConnectedChatInput = connect(
+const ConnectedInputBoard = connect(
   null,
   mapDispatchToProps
-)(ChatInput);
+)(InputBoard);
 
-export default ConnectedChatInput;
+export default ConnectedInputBoard;

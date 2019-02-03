@@ -21,7 +21,7 @@ interface IState {
   ws: WebSocket;
 }
 
-export default class ChatInput extends React.Component<IProps, IState> {
+export default class InputBoard extends React.Component<IProps, IState> {
 
   constructor (props: any) {
     super(props);

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import ConnectedChatHistory from 'src/components/ChatHistory';
-import ConnectedChatInput from 'src/components/ChatInput';
+import ConnectedHistory from 'src/components/History.connected';
+import ConnectedInputBoard from 'src/components/InputBoard.connected';
 
 interface IProps {
   wsURL: string;
@@ -23,8 +23,8 @@ export default class Chatroom extends React.Component<IProps, IState> {
     return (
       <div className="container">
         <p className="notification">Constructed time: {this.state.timestamp.toLocaleString()}</p>
-        <ConnectedChatHistory />
-        <ConnectedChatInput wsURL={this.props.wsURL} />
+        <ConnectedHistory />
+        <ConnectedInputBoard wsURL={this.props.wsURL} />
       </div>
     );
   }

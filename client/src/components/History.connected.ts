@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { Store } from 'src/types';
-import ChatHistory from './component';
+import History from './History.component';
 
 function mapStateToProps ({ message }: Store) {
   return {
@@ -9,6 +9,6 @@ function mapStateToProps ({ message }: Store) {
   };
 }
 
-const ConnectedChatHistory = connect(mapStateToProps, {})(ChatHistory);
+const ConnectedHistory = connect(mapStateToProps, {})(History);
 
-export default ConnectedChatHistory;
+export default ConnectedHistory;
