@@ -1,5 +1,7 @@
 import * as React from "react";
-import { SendMessage } from 'src/actions/message';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { addMessage, clearMessages, MessageAction, SendMessage, submit } from 'src/actions/message';
 import { AddMessage, DClearMessages } from 'src/actions/message';
 import { CLIENT_EVENT, CLIENT_MESSAGE, CLIENT_REGISTER } from 'src/constants';
 import { Message } from 'src/types';
@@ -22,7 +24,7 @@ interface IState {
   ws: WebSocket;
 }
 
-export default class InputBoard extends React.Component<IProps, IState> {
+class PureInputBoard extends React.Component<IProps, IState> {
 
   constructor (props: any) {
     super(props);
@@ -293,3 +295,18 @@ export default class InputBoard extends React.Component<IProps, IState> {
 
   }
 }
+
+function mapDispatchToProps (dispatch: Dispatch<MessageAction>) {
+  return {
+    addMessage: (m: Message) => dispatch(addMessage(m)),
+    clearMessages: () => dispatch(clearMessages()),
+    submitMessage: (m: string) => dispatch(submit(m)),
+  };
+}
+
+const InputBoard = connect(
+  null,
+  mapDispatchToProps
+)(PureInputBoard);
+
+export default InputBoard;

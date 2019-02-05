@@ -1,14 +1,15 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { CLIENT_MESSAGE } from 'src/constants';
-import { Message } from 'src/types';
-import MessageLine from './MessageLine.component';
-import NotificationLine from './NotificationLine.component';
+import { Message, Store } from 'src/types';
+import MessageLine from './MessageLine';
+import NotificationLine from './NotificationLine';
 
 export interface ChatHistoryProps {
   messages: ReadonlyArray<Message>;
 }
 
-export default class History extends React.Component<ChatHistoryProps, object> {
+class PureHistory extends React.Component<ChatHistoryProps, object> {
   public render () {
     return (
       <div className="content messages">
@@ -23,3 +24,13 @@ export default class History extends React.Component<ChatHistoryProps, object> {
     );
   }
 }
+
+function mapStateToProps ({ message }: Store) {
+  return {
+    messages: message.messages,
+  };
+}
+
+const ConnectedHistory = connect(mapStateToProps, {})(PureHistory);
+
+export default ConnectedHistory;
