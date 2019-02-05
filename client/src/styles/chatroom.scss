@@ -2,14 +2,13 @@
 
 @import "~bulma/sass/utilities/_all";
 @import "~bulma/sass/base/_all";
-@import "~bulma/sass/components/message";
 @import "~bulma/sass/elements/button";
 @import "~bulma/sass/elements/container";
 @import "~bulma/sass/elements/form";
 @import "~bulma/sass/elements/notification";
 @import "~bulma/sass/elements/tag";
 
-$message-margin: 1rem;
+$margin: 1rem;
 
 html {
     overflow: hidden;
@@ -43,26 +42,20 @@ html {
 
     &>.message-input {
         flex: 0 0 auto;
-        padding: $message-margin / 2;
+        padding: $margin / 2;
         background: #000;
     }
 }
 
 .message:not(:last-child) {
-    margin-bottom: $message-margin/2;
+    margin-bottom: $margin/2;
 }
 
 .message-piece {
-    margin-left: $message-margin;
-    margin-right: $message-margin;
+    margin: 0.25rem $margin;
 
-    .message-header {
-        padding: 0.25em 1em;
-    }
-
-    .message-body {
-        padding: 0.25em 1.25em;
-    }
+    background: $background;
+    border-radius: $radius;
 }
 
 .inline-notification {
