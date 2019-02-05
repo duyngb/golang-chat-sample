@@ -110,10 +110,10 @@ func (c *Client) ReadPump() {
 		}
 
 		switch m.Event {
-		case UserRegister:
+		case ClientRegister:
 			c.name = fmt.Sprintf("%s", m.Content)
 			c.Register()
-		case UserMessage:
+		case ClientMessage:
 			m.Who = c.name
 			message, err = json.Marshal(&m)
 			if err != nil {

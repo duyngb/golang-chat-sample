@@ -38,7 +38,7 @@ export function submit (message: string): SendMessage {
   return {
     payload: {
       content: message,
-      event: constants.E_USER_MESSAGE,
+      event: constants.CLIENT_MESSAGE,
       timestamp: Date.now(),
       who: 'me'
     },

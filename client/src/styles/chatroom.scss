@@ -64,3 +64,36 @@ html {
         padding: 0.25em 1.25em;
     }
 }
+
+.inline-notification {
+    display: flex;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+
+    .tag {
+        margin-bottom: 0;
+
+        &:not(:last-child) {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &:not(:first-child) {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        &:first-child {
+            min-width: 10em;
+        }
+
+        &:last-child {
+            flex-grow: 1
+        }
+
+        &.uname {
+            min-width: 10em;
+        }
+    }
+}

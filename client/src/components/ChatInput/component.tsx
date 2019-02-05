@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SendMessage } from 'src/actions/message';
 import { AddMessage, DClearMessages } from 'src/actions/message';
-import { E_NULL_EVENT, E_USER_REGISTER } from 'src/constants';
+import { CLIENT_EVENT, CLIENT_MESSAGE, CLIENT_REGISTER } from 'src/constants';
 import { Message } from 'src/types';
 
 const CLIENT_INTERNAL = 'CONNECTOR';
@@ -58,6 +58,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
               <input type="text" name="username" id="username"
                 autoComplete="off"
                 placeholder="Your display name"
+                maxLength={30}
                 disabled={this.state.connectionClosed}
                 value={this.state.username}
                 onChange={this.handleUsernameChange}
@@ -123,7 +124,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
 
     const m: Message = {
       content: this.state.username,
-      event: E_USER_REGISTER,
+      event: CLIENT_REGISTER,
       timestamp: Date.now(),
       who: this.state.username
     };
@@ -152,7 +153,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
   private sockOpenHandler = (_: Event) => {
     const msg: Message = {
       content: 'Connected to server.',
-      event: E_NULL_EVENT,
+      event: CLIENT_EVENT,
       timestamp: Date.now(),
       who: CLIENT_INTERNAL
     };
@@ -164,7 +165,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
   private sockCloseHandler = (_: CloseEvent) => {
     const msg: Message = {
       content: 'Connection to server closed.',
-      event: E_NULL_EVENT,
+      event: CLIENT_EVENT,
       timestamp: Date.now(),
       who: CLIENT_INTERNAL
     };
@@ -175,7 +176,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
   private sockErrorHandler = (_: Event) => {
     const msg: Message = {
       content: 'Error when connect to server.',
-      event: E_NULL_EVENT,
+      event: CLIENT_EVENT,
       timestamp: Date.now(),
       who: CLIENT_INTERNAL
     };
@@ -203,7 +204,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
     this.closeSockConn()
       .catch(() => this.props.addMessage({
         content: 'Failed to close connection to server.',
-        event: E_NULL_EVENT,
+        event: CLIENT_EVENT,
         timestamp: Date.now(),
         who: CLIENT_INTERNAL
       }))
@@ -218,7 +219,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
       .then(() => {
         this.props.addMessage({
           content: 'Reconnecting to server...',
-          event: E_NULL_EVENT,
+          event: CLIENT_EVENT,
           timestamp: Date.now(),
           who: CLIENT_INTERNAL
         });
@@ -227,7 +228,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
       })
       .catch(() => this.props.addMessage({
         content: 'Failed to alter connection to server.',
-        event: E_NULL_EVENT,
+        event: CLIENT_EVENT,
         timestamp: Date.now(),
         who: CLIENT_INTERNAL
       }))
@@ -238,7 +239,7 @@ export default class ChatInput extends React.Component<IProps, IState> {
     for (let i = 0; i < 10; i++) {
       this.props.addMessage({
         content: `Dummy message #${i}`,
-        event: E_NULL_EVENT,
+        event: CLIENT_MESSAGE,
         timestamp: Date.now() + 1000 * i,
         who: 'me'
       });

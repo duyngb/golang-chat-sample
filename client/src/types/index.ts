@@ -1,4 +1,4 @@
-import { MessageEvent } from 'src/constants';
+import { MessageEvent, SelfEvent, ServerEvent } from 'src/constants';
 
 /**
  * Message interface represents a message piece exchanged with server.
@@ -12,6 +12,14 @@ export interface Message {
   who?: string;
   /** Message content. */
   content: string;
+}
+
+export interface UserMessage extends Message {
+  event: SelfEvent;
+}
+
+export interface ServerMessage extends Message {
+  event: ServerEvent;
 }
 
 /**

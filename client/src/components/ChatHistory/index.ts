@@ -5,9 +5,7 @@ import ChatHistory from './component';
 
 function mapStateToProps ({ message }: Store) {
   return {
-    failedMessages: message.failedMessages,
     messages: message.messages,
-    pendingMessages: message.pendingMessages,
   };
 }
 
