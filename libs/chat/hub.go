@@ -57,7 +57,6 @@ func (h *Hub) Run() {
 			for client := range h.clients {
 				select {
 				case client.send <- message:
-					hubLogger.Debugf("send -> %s", client.name)
 				default:
 					// Fallback when failed to send, e.g., connection closed by client.
 					close(client.send)
