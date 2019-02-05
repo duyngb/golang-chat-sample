@@ -8,11 +8,9 @@ interface IProps {
 export default class MessageLine extends React.Component<IProps, object> {
   public render () {
     return (
-      <div className="message message-piece">
-        <div className="message-body">
-          <span className="tag is-dark">{this.props.message.who}</span>
-          &nbsp; {this.props.message.content}
-        </div>
+      <div className="message-piece" data-sender={this.props.message.who}>
+        <span className="tag is-dark">{this.props.message.who}</span>
+        &nbsp;{this.props.message.content}
       </div>
     );
   }

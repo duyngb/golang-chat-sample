@@ -8,17 +8,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"example.com/socket-server/libs/common"
+	"example.com/socket-server/libs/log"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
 )
 
-var rendererLogger = log.New("renderder")
-
-func init() {
-	rendererLogger.SetHeader(common.LogHeader)
-}
+var rendererLogger = log.NewLogger("renderder")
 
 type templateRenderer struct {
 	root           string

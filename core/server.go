@@ -2,35 +2,27 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"os"
-	"os/exec"
 	"os/signal"
 	"time"
 
 	"example.com/socket-server/libs/chat"
-	"example.com/socket-server/libs/common"
+	"example.com/socket-server/libs/log"
 	"example.com/socket-server/routes"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/labstack/gommon/log"
 )
 
 // Server is an extended wrapper for echo.Echo
 type Server struct {
 	*echo.Echo
 
-	Hub                *chat.Hub
-	Debug              bool
-	WithWebpackWatcher bool
+	Hub *chat.Hub
 }
 
 // NewServer create an echo server wrapped inside core.Server type.
-func NewServer() *Server {
-	// Check for debug mode based on environment variable
-	isDebug := os.Getenv("SOCK_ENV") != "PRODUCTION"
-	isWithWebpackWatcher := os.Getenv("SOCK_WITH_WEBPACK") != ""
+func NewServer(isDebug bool) *Server {
 
 	e := echo.New()
 	h := chat.NewHub()
@@ -43,7 +35,6 @@ func NewServer() *Server {
 		}),
 		middleware.Static("public"),
 		middleware.Static("client/dist"))
-	e.Logger.(*log.Logger).SetHeader(common.LogHeader)
 
 	// Register template renderer
 	e.Renderer = newRenderer(isDebug)
@@ -51,14 +42,9 @@ func NewServer() *Server {
 	e.HTTPErrorHandler = httpErrorHandler
 
 	// Process server with debug signal, if present
-	if isDebug {
-		e.Debug = isDebug
-		e.Logger.SetLevel(log.DEBUG)
-		e.Logger.Info(`Server running under debug mode. Set enviroment variable ` +
-			`SOCK_ENV to PRODUCTION to run server in production mode.`)
-	} else {
-		e.Logger.SetLevel(log.INFO)
-	}
+	e.Debug = isDebug
+
+	e.Logger = log.NewLogger("echo")
 
 	// Bind routes
 	routes.Bind("/", &routes.DefaultRoute{}, e)
@@ -66,7 +52,7 @@ func NewServer() *Server {
 	routes.Bind("/chatroom", &routes.ChatRoom{Hub: h}, e)
 
 	// Cast original echo server to our alias
-	return &Server{e, h, isDebug, isWithWebpackWatcher}
+	return &Server{e, h}
 }
 
 // Run runs internal echo server.
@@ -76,27 +62,7 @@ func (s *Server) Run() {
 	// 	e.Logger.Fatal(err)
 	// }
 
-	var watcher *exec.Cmd
-
 	go s.Hub.Run()
-
-	// Start subprocess
-	go func() {
-		if s.WithWebpackWatcher {
-			watcher = exec.Command("npm", "run", "start")
-
-			watcher.Dir = "./client"
-
-			watcher.Stdout = os.Stdout
-			watcher.Stderr = os.Stderr
-
-			err := watcher.Run()
-			if err != nil {
-				fmt.Printf("%v\n", err)
-				return
-			}
-		}
-	}()
 
 	if err := s.Start("localhost:8000"); err != nil {
 		s.Logger.Fatal("Shutting down HTTP server due to error...")
@@ -110,16 +76,8 @@ func (s *Server) Run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel() // Release resource if op complete before timed out
 
-	defer func() {
-		if err := s.Shutdown(ctx); err != nil {
-			s.Logger.Fatal(err)
-		}
-	}()
-
-	if s.WithWebpackWatcher {
-		s.Logger.Infof("Stopping process %d", watcher.Process.Pid)
-		if err := watcher.Process.Signal(os.Interrupt); err != nil {
-			fmt.Printf("%v\n", err)
-		}
+	if err := s.Shutdown(ctx); err != nil {
+		s.Logger.Fatal(err)
 	}
+
 }

@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"example.com/socket-server/libs/common"
+	"example.com/socket-server/libs/log"
 
 	"github.com/gorilla/websocket"
-	"github.com/labstack/gommon/log"
 )
 
 const (
@@ -29,12 +28,8 @@ var (
 	newline = []byte{'\n'}
 	space   = []byte{' '}
 
-	clientLogger = log.New("client")
+	clientLogger = log.NewLogger("client")
 )
-
-func init() {
-	clientLogger.SetHeader(common.LogHeader)
-}
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
@@ -98,7 +93,7 @@ func (c *Client) ReadPump() {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseNormalClosure) {
-				clientLogger.Debugf("client disconnected | %v", err)
+				clientLogger.Errorf("client disconnected unexpectedly: %v", err)
 			}
 			break
 		}
@@ -140,7 +135,6 @@ func (c *Client) WritePump() {
 	for {
 		select {
 		case message, ok := <-c.send: // Send request
-			clientLogger.Debugf("Received send request: %s", message)
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				// Hub closes channel.
@@ -161,9 +155,9 @@ func (c *Client) WritePump() {
 		case <-ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-				clientLogger.Errorf("client ping failed: %v", err)
 				// For most case, connection has been closed in somewhere,
 				// and we have nothing to do with this.
+				clientLogger.Debugf("client ping failed: %v", err)
 				return
 			}
 		}
