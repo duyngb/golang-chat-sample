@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // SimpleRoute holds basic methods for manage a single route.

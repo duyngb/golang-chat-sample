@@ -10,7 +10,7 @@ import (
 
 	"example.com/socket-server/libs/log"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 var rendererLogger = log.NewLogger("renderder")

@@ -11,8 +11,8 @@ import (
 	"example.com/socket-server/libs/vars"
 	"example.com/socket-server/routes"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 // Server is an extended wrapper for echo.Echo

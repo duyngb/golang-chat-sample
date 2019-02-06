@@ -4,7 +4,7 @@ import (
 	"example.com/socket-server/libs/chat"
 
 	"github.com/gorilla/websocket"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 var upgrader = websocket.Upgrader{}
