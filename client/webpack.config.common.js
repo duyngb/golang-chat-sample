@@ -2,9 +2,11 @@
 const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
+const InlineChunkHTMLPlugin = require( './util' ).InlineChunkHTMLPlugin;
 
 const resolve = require( './util' ).resolve;
 
+/** @type {import('html-minifier').Options} */
 const minify = {
   removeComments: true,
   collapseWhitespace: true,
@@ -23,9 +25,8 @@ module.exports = {
   mode: 'development',
   stats: true,
   entry: {
-    chatroom: resolve( 'src', 'chatroom.tsx' ),
+    chatroom: resolve( 'src', 'chatroom.ts' ),
     chatrooms: resolve( 'src', 'chatrooms.ts' ),
-    react: [ 'react', 'react-dom', 'react-redux' ]
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -35,11 +36,26 @@ module.exports = {
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
+      minSize: 0,
       cacheGroups: {
+        redux: {
+          test: /[\\/]node_modules[\\/]react-redux[\\/]/,
+          name: 'redux',
+          chunks: 'all',
+          priority: 3,
+        },
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-.*)[\\/]/,
+          name: 'react',
+          chunks: 'all',
+          priority: 2,
+        },
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
-          chunks: 'all'
+          chunks: 'all',
+          priority: 1,
+          enforce: true,
         }
       }
     }
@@ -80,16 +96,17 @@ module.exports = {
       inject: true,
       template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
-      chunks: [ 'runtime', 'react', 'vendors', 'chatroom' ],
-      minify
+      chunks: [ 'vendors', 'chatroom' ],
+      minify,
     } ),
     new HTMLWebpackPlugin( {
       inject: true,
       template: resolve( 'src', 'chatrooms.html' ),
       filename: 'chatrooms.html',
-      chunks: [ 'runtime', 'vendors', 'chatrooms' ],
-      minify
+      chunks: [],
+      minify,
     } ),
+    new InlineChunkHTMLPlugin( HTMLWebpackPlugin, [ /runtime/ ] ),
     new HashedModuleIdsPlugin()
   ],
 

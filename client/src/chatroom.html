@@ -11,10 +11,97 @@
           href="/favicon.png"
           type="image/x-icon">
     <title>React Example</title>
+    <style>
+        #loading {
+            background-color: aquamarine;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            top: 0;
+            flex-direction: column;
+            opacity: 0;
+
+            transition: opacity 0.5s linear;
+        }
+
+        #loading>.text {
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .sk-spinner-pulse {
+            width: 40px;
+            height: 40px;
+            margin: 40px auto;
+            background-color: #333;
+            border-radius: 100%;
+            -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
+            animation: sk-pulseScaleOut 1s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes sk-pulseScaleOut {
+            0% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sk-pulseScaleOut {
+            0% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <script>
+        ( function () {
+            var shown = false;
+            var i = 'loading';
+            var loadingTimer = window.setTimeout( function () {
+                shown = true;
+                document.getElementById( i ).style.opacity = '1';
+            }, 200 );
+
+            window.onload = function () {
+                var l = document.getElementById( i );
+                window.clearTimeout( loadingTimer );
+                if ( shown ) {
+                    l.style.transitionDelay = '1s';
+                    l.style.opacity = 0;
+                    window.setTimeout( function () {
+                        l.remove();
+                    }, 3000 );
+                } else {
+                    l.remove();
+                }
+            };
+        } )();
+    </script>
     <div id="chatroom"></div>
+    <div id="loading">
+        <div class="text">Loading...</div>
+        <div class="sk-spinner-pulse"></div>
+    </div>
+
 </body>
 
 </html>

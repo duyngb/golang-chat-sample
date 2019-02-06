@@ -8,7 +8,7 @@ const common = require( './webpack.config.common' );
 module.exports = merge( common, {
   mode: 'production',
   output: {
-    filename: '[name].[contenthash].js'
+    filename: '[name].[contenthash:8].js'
   },
   optimization: {
     minimize: true,
@@ -16,7 +16,14 @@ module.exports = merge( common, {
       new UglifyJSPlguin( {
         parallel: true,
         cache: true,
-        sourceMap: false
+        sourceMap: false,
+        extractComments: false,
+        uglifyOptions: {
+          compress: true,
+          ecma: 5,
+          keep_classnames: false,
+          keep_fnames: false,
+        }
       } ),
       new OptimizeCSSAssetsPlugin()
     ],
