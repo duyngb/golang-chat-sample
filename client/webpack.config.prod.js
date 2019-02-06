@@ -2,8 +2,10 @@ const merge = require( 'webpack-merge' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
 const UglifyJSPlguin = require( 'uglifyjs-webpack-plugin' );
+const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 
 const common = require( './webpack.config.common' );
+const resolve = require( './util' ).resolve;
 
 module.exports = merge( common, {
   mode: 'production',
@@ -30,20 +32,22 @@ module.exports = merge( common, {
     mergeDuplicateChunks: true,
     nodeEnv: 'production'
   },
-  module: {
-    rules: [ {
-      test: /\.(sa|sc|c)ss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'sass-loader',
-      ],
-    } ]
-  },
+  // module: {
+  //   rules: [ {
+  //     test: /\.(sa|sc|c)ss$/,
+  //     use: [
+  //       // MiniCssExtractPlugin.loader,
+  //       'style-loader',
+  //       'css-loader',
+  //       'sass-loader',
+  //     ],
+  //   } ]
+  // },
   plugins: [
-    new MiniCssExtractPlugin( {
-      filename: '[name].css',
-      chunkFilename: '[name].[contenthash].css'
-    } )
+    new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
+    // new MiniCssExtractPlugin( {
+    //   filename: '[name].css',
+    //   chunkFilename: '[name].[contenthash].css'
+    // } )
   ]
 } );

@@ -1,7 +1,7 @@
 // Base configuration for webpack build pipeline
 const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HashedModuleIdsPlugin = require( 'webpack' ).HashedModuleIdsPlugin;
+const ScriptExtHtmlWebpackPlugin = require( 'script-ext-html-webpack-plugin' );
 const InlineChunkHTMLPlugin = require( './util' ).InlineChunkHTMLPlugin;
 
 const resolve = require( './util' ).resolve;
@@ -91,13 +91,15 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
     new HTMLWebpackPlugin( {
       inject: true,
       template: resolve( 'src', 'chatroom.html' ),
       filename: 'chatroom.html',
       chunks: [ 'vendors', 'chatroom' ],
       minify,
+    } ),
+    new ScriptExtHtmlWebpackPlugin( {
+      defaultAttribute: 'defer'
     } ),
     new HTMLWebpackPlugin( {
       inject: true,
