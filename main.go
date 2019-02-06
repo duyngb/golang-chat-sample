@@ -14,5 +14,9 @@ func main() {
 
 	var server = core.NewServer()
 	// Start server here at pre-defined port
-	server.Run()
+	err := server.Run()
+	if err != nil {
+		mainLogger.Panicf("Server start up failed: %v", err)
+		panic(err)
+	}
 }

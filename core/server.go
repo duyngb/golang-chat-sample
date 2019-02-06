@@ -38,6 +38,12 @@ func NewServer() *Server {
 		middleware.Static("public"),
 		middleware.Static("client/dist"))
 
+	if vars.GZipEnabled {
+		e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+			Level: vars.GZipLevel,
+		}))
+	}
+
 	// Register template renderer
 	e.Renderer = newRenderer(isDebug)
 	// Register error handler
@@ -59,17 +65,18 @@ func NewServer() *Server {
 }
 
 // Run runs internal echo server.
-func (s *Server) Run() {
-	// if err := e.StartTLS(":8001", "etc/cert.pem", "etc/key.pem"); err != nil {
-	// 	e.Logger.Fatal("Shutting down TLS server due to error...")
-	// 	e.Logger.Fatal(err)
-	// }
+func (s *Server) Run() error {
+	var err error
 
 	go s.Hub.Run()
 
-	if err := s.Start("localhost:8000"); err != nil {
-		s.Logger.Fatal("Shutting down HTTP server due to error...")
-		s.Logger.Fatal(err)
+	if vars.TLS {
+		err = s.StartTLS(vars.Address, vars.CertFile, vars.KeyFile)
+	} else {
+		err = s.Start(vars.Address)
+	}
+	if err != nil {
+		return err
 	}
 
 	// Wait for interrupt signal
@@ -80,7 +87,8 @@ func (s *Server) Run() {
 	defer cancel() // Release resource if op complete before timed out
 
 	if err := s.Shutdown(ctx); err != nil {
-		s.Logger.Fatal(err)
+		return err
 	}
 
+	return nil
 }
