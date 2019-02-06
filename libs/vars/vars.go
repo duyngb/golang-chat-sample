@@ -1,17 +1,14 @@
 package vars
 
-import "os"
+import "flag"
 
 // Common state variable set at startup
 var (
-	IsDebug              bool
-	IsWithWebpackWatcher bool
+	IsDebug bool
 )
 
 func init() {
-	// Check for debug mode based on environment variable
-	IsDebug = os.Getenv("SOCK_ENV") != "PRODUCTION"
+	flag.BoolVar(&IsDebug, "debug", false, "Force server to run under debug mode.")
 
-	IsWithWebpackWatcher = os.Getenv("SOCK_WITH_WEBPACK") != ""
-
+	flag.Parse()
 }

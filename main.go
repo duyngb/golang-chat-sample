@@ -9,11 +9,10 @@ import (
 func main() {
 	mainLogger := log.NewLogger("main")
 	if vars.IsDebug {
-		mainLogger.Info(`Server running under debug mode. Set enviroment variable ` +
-			`SOCK_ENV to PRODUCTION to run server in production mode.`)
+		mainLogger.Info("NOTE: Server running under debug mode")
 	}
 
-	var server = core.NewServer(vars.IsDebug)
+	var server = core.NewServer()
 	// Start server here at pre-defined port
 	server.Run()
 }

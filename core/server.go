@@ -8,6 +8,7 @@ import (
 
 	"example.com/socket-server/libs/chat"
 	"example.com/socket-server/libs/log"
+	"example.com/socket-server/libs/vars"
 	"example.com/socket-server/routes"
 
 	"github.com/labstack/echo"
@@ -22,7 +23,8 @@ type Server struct {
 }
 
 // NewServer create an echo server wrapped inside core.Server type.
-func NewServer(isDebug bool) *Server {
+func NewServer() *Server {
+	isDebug := vars.IsDebug
 
 	e := echo.New()
 	h := chat.NewHub()
@@ -43,6 +45,7 @@ func NewServer(isDebug bool) *Server {
 
 	// Process server with debug signal, if present
 	e.Debug = isDebug
+	e.HideBanner = !isDebug
 
 	e.Logger = log.NewLogger("echo")
 
