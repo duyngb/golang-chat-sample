@@ -21,7 +21,7 @@ interface IState {
   message: string;
   registered: boolean;
   username: string;
-  ws: WebSocket;
+  ws?: WebSocket;
 }
 
 class PureInputBoard extends React.Component<IProps, IState> {
@@ -35,7 +35,6 @@ class PureInputBoard extends React.Component<IProps, IState> {
       message: '',
       registered: false,
       username: '',
-      ws: this.constructWSConn(),
     };
   }
 
@@ -107,6 +106,10 @@ class PureInputBoard extends React.Component<IProps, IState> {
     );
   }
 
+  public componentDidMount = () => {
+    this.constructWSConn().then(ws => this.setState({ ws }));
+  }
+
   private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ message: e.target.value });
   }
@@ -117,7 +120,7 @@ class PureInputBoard extends React.Component<IProps, IState> {
     const { message } = this.state;
     const d = this.props.submitMessage(message);
 
-    this.state.ws.send(JSON.stringify(d.payload));
+    this.state.ws!.send(JSON.stringify(d.payload));
 
     this.setState({ message: '' });
   }
@@ -136,14 +139,19 @@ class PureInputBoard extends React.Component<IProps, IState> {
       who: this.state.username
     };
 
-    this.state.ws.send(JSON.stringify(m));
+    this.state.ws!.send(JSON.stringify(m));
     this.setState({ registered: true });
   }
 
-  private constructWSConn (): WebSocket {
+  private constructWSConn = () => new Promise<WebSocket>((resolve, reject) => {
+    let ws: WebSocket;
     const loc = new URL(this.props.wsURL, window.location.href);
     loc.protocol = loc.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(loc.href);
+    try {
+      ws = new WebSocket(loc.href);
+    } catch (err) {
+      return reject(err);
+    }
 
     ws.onmessage = e => {
       const msg = JSON.parse(e.data) as Message;
@@ -154,8 +162,8 @@ class PureInputBoard extends React.Component<IProps, IState> {
     ws.onclose = this.sockCloseHandler;
     ws.onerror = this.sockErrorHandler;
 
-    return ws;
-  }
+    return resolve(ws);
+  })
 
   private sockOpenHandler = (_: Event) => {
     const msg: Message = {
@@ -191,7 +199,7 @@ class PureInputBoard extends React.Component<IProps, IState> {
   }
 
   private closeSockConn = () => new Promise((resolve, reject) => {
-    this.state.ws.close(1000);
+    this.state.ws!.close(1000);
 
     // Reject if could not close sock conn after 5s.
     const t = setTimeout(() => reject(), 5000);
@@ -230,11 +238,11 @@ class PureInputBoard extends React.Component<IProps, IState> {
           timestamp: Date.now(),
           who: CLIENT_INTERNAL
         });
-        const ws = this.constructWSConn();
-        this.setState({ ws });
+        return this.constructWSConn();
       })
-      .catch(() => this.props.addMessage({
-        content: 'Failed to alter connection to server.',
+      .then(ws => this.setState({ ws }))
+      .catch(err => this.props.addMessage({
+        content: `Failed to alter connection to server. ${err}`,
         event: CLIENT_EVENT,
         timestamp: Date.now(),
         who: CLIENT_INTERNAL
@@ -259,7 +267,7 @@ class PureInputBoard extends React.Component<IProps, IState> {
 
   private send = (m: string) => {
     const d = this.props.submitMessage(m);
-    this.state.ws.send(JSON.stringify(d.payload));
+    this.state.ws!.send(JSON.stringify(d.payload));
   }
 
   private toggleAutosend = (e: React.MouseEvent) => {
