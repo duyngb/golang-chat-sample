@@ -7,14 +7,153 @@
           content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible"
           content="ie=edge">
+    <meta name="Description"
+          content="A simple chatroom with websocket & React">
     <link rel="shortcut icon"
           href="/favicon.png"
           type="image/x-icon">
     <title>React Example</title>
+    <style>
+        #loading {
+            background-color: #00363a;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            top: 0;
+            flex-direction: column;
+            opacity: 0;
+
+            transition: opacity 1s linear;
+        }
+
+        #loading>.text {
+            text-align: center;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #fff;
+        }
+
+        .spinner {
+            margin: 10px auto;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .spinner>div {
+            background-color: aliceblue;
+            height: 100%;
+            width: 6px;
+            display: inline-block;
+            margin-left: 1px;
+            margin-right: 1px;
+
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        }
+
+        .spinner .rect2 {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+
+        .spinner .rect3 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        .spinner .rect4 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        .spinner .rect5 {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+
+        @-webkit-keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                -webkit-transform: scaleY(0.4)
+            }
+
+            20% {
+                -webkit-transform: scaleY(1.0)
+            }
+        }
+
+        @keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                transform: scaleY(0.4);
+                -webkit-transform: scaleY(0.4);
+            }
+
+            20% {
+                transform: scaleY(1.0);
+                -webkit-transform: scaleY(1.0);
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <script>
+        ( function () {
+            var shown = false;
+            var i = 'loading';
+            var elementFinder;
+            var loadingTimer;
+
+            elementFinder = window.setInterval( function () {
+                var e = document.getElementById( i );
+                if ( e ) {
+                    window.clearInterval( elementFinder )
+                    loadingTimer = window.setTimeout( function () {
+                        shown = true;
+                        e.style.opacity = '1'
+                    }, 200 )
+                };
+            }, 200 );
+
+            window.onload = function () {
+                var l = document.getElementById( i );
+                if ( loadingTimer ) {
+                    window.clearTimeout( loadingTimer );
+                }
+                if ( l && shown ) {
+                    l.style.transitionDelay = '1s';
+                    l.style.opacity = 0;
+                    window.setTimeout( function () {
+                        l.remove();
+                    }, 2000 );
+                } else if ( l ) {
+                    l.remove();
+                }
+            };
+        } )();
+    </script>
     <div id="chatroom"></div>
+    <div id="loading">
+        <div class="text">Loading...</div>
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+
 </body>
 
 </html>

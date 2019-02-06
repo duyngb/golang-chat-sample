@@ -2,13 +2,15 @@ const merge = require( 'webpack-merge' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
 const UglifyJSPlguin = require( 'uglifyjs-webpack-plugin' );
+const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 
 const common = require( './webpack.config.common' );
+const resolve = require( './util' ).resolve;
 
 module.exports = merge( common, {
   mode: 'production',
   output: {
-    filename: '[name].[contenthash].js'
+    filename: '[name].[contenthash:8].js'
   },
   optimization: {
     minimize: true,
@@ -16,27 +18,36 @@ module.exports = merge( common, {
       new UglifyJSPlguin( {
         parallel: true,
         cache: true,
-        sourceMap: false
+        sourceMap: false,
+        extractComments: false,
+        uglifyOptions: {
+          compress: true,
+          ecma: 5,
+          keep_classnames: false,
+          keep_fnames: false,
+        }
       } ),
       new OptimizeCSSAssetsPlugin()
     ],
     mergeDuplicateChunks: true,
     nodeEnv: 'production'
   },
-  module: {
-    rules: [ {
-      test: /\.(sa|sc|c)ss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'sass-loader',
-      ],
-    } ]
-  },
+  // module: {
+  //   rules: [ {
+  //     test: /\.(sa|sc|c)ss$/,
+  //     use: [
+  //       // MiniCssExtractPlugin.loader,
+  //       'style-loader',
+  //       'css-loader',
+  //       'sass-loader',
+  //     ],
+  //   } ]
+  // },
   plugins: [
-    new MiniCssExtractPlugin( {
-      filename: '[name].css',
-      chunkFilename: '[name].[contenthash].css'
-    } )
+    new CleanWebpackPlugin( [ resolve( 'dist' ) ] ),
+    // new MiniCssExtractPlugin( {
+    //   filename: '[name].css',
+    //   chunkFilename: '[name].[contenthash].css'
+    // } )
   ]
 } );
