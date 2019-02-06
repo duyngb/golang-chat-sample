@@ -15,7 +15,7 @@
     <title>React Example</title>
     <style>
         #loading {
-            background-color: aquamarine;
+            background-color: #00363a;
             position: fixed;
             width: 100vw;
             height: 100vh;
@@ -27,47 +27,80 @@
             flex-direction: column;
             opacity: 0;
 
-            transition: opacity 0.5s linear;
+            transition: opacity 1s linear;
         }
 
         #loading>.text {
             text-align: center;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #fff;
         }
 
-        .sk-spinner-pulse {
-            width: 40px;
+        .spinner {
+            margin: 10px auto;
+            width: 50px;
             height: 40px;
-            margin: 40px auto;
-            background-color: #333;
-            border-radius: 100%;
-            -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
-            animation: sk-pulseScaleOut 1s infinite ease-in-out;
+            text-align: center;
+            font-size: 10px;
         }
 
-        @-webkit-keyframes sk-pulseScaleOut {
-            0% {
-                -webkit-transform: scale(0);
-                transform: scale(0);
+        .spinner>div {
+            background-color: aliceblue;
+            height: 100%;
+            width: 6px;
+            display: inline-block;
+            margin-left: 1px;
+            margin-right: 1px;
+
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        }
+
+        .spinner .rect2 {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+
+        .spinner .rect3 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        .spinner .rect4 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        .spinner .rect5 {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+
+        @-webkit-keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                -webkit-transform: scaleY(0.4)
             }
 
-            100% {
-                -webkit-transform: scale(1);
-                transform: scale(1);
-                opacity: 0;
+            20% {
+                -webkit-transform: scaleY(1.0)
             }
         }
 
-        @keyframes sk-pulseScaleOut {
-            0% {
-                -webkit-transform: scale(0);
-                transform: scale(0);
+        @keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                transform: scaleY(0.4);
+                -webkit-transform: scaleY(0.4);
             }
 
-            100% {
-                -webkit-transform: scale(1);
-                transform: scale(1);
-                opacity: 0;
+            20% {
+                transform: scaleY(1.0);
+                -webkit-transform: scaleY(1.0);
             }
         }
     </style>
@@ -78,21 +111,32 @@
         ( function () {
             var shown = false;
             var i = 'loading';
-            var loadingTimer = window.setTimeout( function () {
-                shown = true;
-                document.getElementById( i ).style.opacity = '1';
+            var elementFinder;
+            var loadingTimer;
+
+            elementFinder = window.setInterval( function () {
+                var e = document.getElementById( i );
+                if ( e ) {
+                    window.clearInterval( elementFinder )
+                    loadingTimer = window.setTimeout( function () {
+                        shown = true;
+                        e.style.opacity = '1'
+                    }, 200 )
+                };
             }, 200 );
 
             window.onload = function () {
                 var l = document.getElementById( i );
-                window.clearTimeout( loadingTimer );
-                if ( shown ) {
+                if ( loadingTimer ) {
+                    window.clearTimeout( loadingTimer );
+                }
+                if ( l && shown ) {
                     l.style.transitionDelay = '1s';
                     l.style.opacity = 0;
                     window.setTimeout( function () {
                         l.remove();
-                    }, 3000 );
-                } else {
+                    }, 2000 );
+                } else if ( l ) {
                     l.remove();
                 }
             };
@@ -101,7 +145,13 @@
     <div id="chatroom"></div>
     <div id="loading">
         <div class="text">Loading...</div>
-        <div class="sk-spinner-pulse"></div>
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
     </div>
 
 </body>
