@@ -8,6 +8,7 @@ import (
 
 	"example.com/socket-server/libs/chat"
 	"example.com/socket-server/libs/log"
+	selfMiddleware "example.com/socket-server/libs/middleware"
 	"example.com/socket-server/libs/vars"
 	"example.com/socket-server/routes"
 
@@ -30,19 +31,21 @@ func NewServer() *Server {
 	h := chat.NewHub()
 
 	// Initialize server with required configurations
-	e.Use(
-		middleware.Recover(),
-		middleware.LoggerWithConfig(middleware.LoggerConfig{
-			Format: "${remote_ip}->${host} ${status} ${method} ${uri} (${latency_human})\n",
-		}),
-		middleware.Static("public"),
-		middleware.Static("client/dist"))
-
 	if vars.GZipEnabled {
 		e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 			Level: vars.GZipLevel,
 		}))
 	}
+
+	e.Use(
+		middleware.Recover(),
+		middleware.LoggerWithConfig(middleware.LoggerConfig{
+			Format: "${remote_ip}->${host} ${status} ${method} ${uri} (${latency_human})\n",
+		}),
+		selfMiddleware.CacheControl(vars.CacheMaxAge),
+		middleware.Static("public"),
+		middleware.Static("client/dist"),
+	)
 
 	// Register template renderer
 	e.Renderer = newRenderer(isDebug)

@@ -11,6 +11,7 @@ var (
 	Address     string
 	GZipEnabled bool
 	GZipLevel   int
+	CacheMaxAge int
 )
 
 func init() {
@@ -24,8 +25,10 @@ func init() {
 
 	// Server configs
 	flag.StringVar(&Address, "addr", "localhost:8000", "Server listening address, [host]:[port].")
+
 	flag.BoolVar(&GZipEnabled, "gzip", false, "Enable trafic compression.")
 	flag.IntVar(&GZipLevel, "gzip-level", 5, "Compression level.")
+	flag.IntVar(&CacheMaxAge, "max-age", 5184000, "Cache-Control max-age value.")
 
 	flag.Parse()
 }
