@@ -16,17 +16,10 @@ var hubLogger = log.NewLogger("hub")
 // It is server responsibility to maintain Hub.Run routine in
 // its own loop.
 type Hub struct {
-	// Registered clients
-	clients map[*Client]bool
-
-	// Broadcast channel
-	broadcast chan []byte
-
-	// Register requests from the clients.
-	register chan *Client
-
-	// Unregister requests from the clients.
-	unregister chan *Client
+	clients    map[*Client]bool // Registered clients
+	broadcast  chan []byte      // Broadcast channel
+	register   chan *Client     // Register requests from the clients.
+	unregister chan *Client     // Unregister requests from the clients.
 }
 
 // NewHub create a new hub for a single chatroom.
@@ -72,7 +65,7 @@ func (h *Hub) Broadcast(message []byte) {
 	h.broadcast <- message
 }
 
-// Announce broadcasts annoucement message to all registered clients.
+// Announce broadcasts announcement message to all registered clients.
 func (h *Hub) Announce(e Event, content string) {
 	msg, err := json.Marshal(Frame{
 		Event:     e,

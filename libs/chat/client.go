@@ -49,9 +49,9 @@ type Client struct {
 	// to client connection.
 	send chan []byte
 
-	// Disconect signal from client.
+	// Disconnect signal from client.
 	//
-	// On unregister process, a client will push disconect signal
+	// On unregister process, a client will push disconnect signal
 	// to this channel. Use this channel outside client package
 	// context to terminate handler function on server side.
 	Disconnected chan bool
@@ -68,7 +68,7 @@ func NewClient(hub *Hub, conn *websocket.Conn) *Client {
 	}
 }
 
-// Register registers current client to binded hub.
+// Register registers current client to bindded hub.
 func (c *Client) Register() {
 	c.hub.register <- c
 }
