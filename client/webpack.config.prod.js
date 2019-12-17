@@ -1,7 +1,6 @@
 const merge = require( 'webpack-merge' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
-const UglifyJSPlguin = require( 'uglifyjs-webpack-plugin' );
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 
 const common = require( './webpack.config.common' );
@@ -15,18 +14,6 @@ module.exports = merge( common, {
   optimization: {
     minimize: true,
     minimizer: [
-      new UglifyJSPlguin( {
-        parallel: true,
-        cache: true,
-        sourceMap: false,
-        extractComments: false,
-        uglifyOptions: {
-          compress: true,
-          ecma: 5,
-          keep_classnames: false,
-          keep_fnames: false,
-        }
-      } ),
       new OptimizeCSSAssetsPlugin()
     ],
     mergeDuplicateChunks: true,
